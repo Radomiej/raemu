@@ -26,28 +26,15 @@ public class PureByte {
     }
 
 
-    public void setBites(PureBit[] setBites) {
-        for (int i = 0; i < bites.length; i++) {
-            bites[i].setValue(setBites[i].getValue());
-        }
-    }
 
-    public void setBites(PureByte fromBytes) {
-        for (int i = 0; i < bites.length; i++) {
-            bites[i].setValue(fromBytes.getBit(i).getValue());
-        }
-    }
-
-    public PureBit[] getBites() {
-        PureBit[] bitesCopy = new PureBit[bites.length];
-        for (int i = 0; i < bites.length; i++) {
-            bitesCopy[i] = new PureBit(bites[i].getValue());
-        }
-        //System.arraycopy( bites, 0, bitesCopy, 0, bites.length );
-        return bitesCopy;
-    }
 
     //Multiple argument operations
+    public void incrament(){
+        for (int i = bites.length - 1; i >= 0; i--) {
+            bites[i] = bites[i - 1];
+        }
+    }
+
     public void moveLeft() {
         for (int i = bites.length - 1; i > 0; i--) {
             bites[i] = bites[i - 1];
@@ -85,18 +72,42 @@ public class PureByte {
         return new PureBit(bites[index].getValue());
     }
 
+    public void setBites(PureBit[] setBites) {
+        for (int i = 0; i < bites.length; i++) {
+            bites[i].setValue(setBites[i].getValue());
+        }
+    }
+
+    public void setBites(PureByte fromBytes) {
+        for (int i = 0; i < bites.length; i++) {
+            bites[i].setValue(fromBytes.getBit(i).getValue());
+        }
+    }
+
+    public PureBit[] getBites() {
+        PureBit[] bitesCopy = new PureBit[bites.length];
+        for (int i = 0; i < bites.length; i++) {
+            bitesCopy[i] = new PureBit(bites[i].getValue());
+        }
+        //System.arraycopy( bites, 0, bitesCopy, 0, bites.length );
+        return bitesCopy;
+    }
+
     public String toBinaryString() {
         String result = "";
-        for (int i = 0; i < bites.length - 1; i++) {
+        for (int i = 0; i < bites.length; i++) {
             if (bites[i].getValue()) result += "1";
             else result += "0";
         }
         return result;
     }
 
-
     @Override
     public String toString() {
         return Arrays.toString(bites);
+    }
+
+    public int getLenght() {
+        return bites.length;
     }
 }

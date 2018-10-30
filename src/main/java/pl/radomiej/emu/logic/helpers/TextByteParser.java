@@ -8,7 +8,7 @@ public class TextByteParser {
         int lenght = textByte.length();
         PureByte result = new PureByte(lenght);
         for(int i = 0; i < lenght; i++){
-            if(textByte.charAt(lenght - 1 - i) == '1') result.setBit(i, true);
+            if(textByte.charAt(lenght - 1 - i) == '1') result.setBit(lenght - 1 - i, true);
         }
         return result;
     }
