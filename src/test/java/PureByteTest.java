@@ -1,7 +1,7 @@
 import org.junit.Test;
 import pl.radomiej.emu.logic.PureByte;
-import pl.radomiej.emu.logic.helpers.BitsMathHelper;
-import pl.radomiej.emu.logic.helpers.TextByteParser;
+import pl.radomiej.emu.logic.helpers.ToByteParser;
+import pl.radomiej.emu.logic.helpers.U2BitsMathHelper;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -9,7 +9,7 @@ public class PureByteTest {
 
     @Test
     public void byteParserTest() {
-        PureByte testByte = TextByteParser.parse("00010111");
+        PureByte testByte = ToByteParser.parse("00010111");
 
 
         assertEquals(true, testByte.getBit(7).getValue());
@@ -26,7 +26,7 @@ public class PureByteTest {
     public void rotateShiftLeft() {
 
 
-        PureByte testByte = TextByteParser.parse("00010111");
+        PureByte testByte = ToByteParser.parse("00010111");
         testByte.rotateBitesLeft(3);
         System.out.print(testByte.toBinaryString());
         // assert statements
@@ -39,7 +39,7 @@ public class PureByteTest {
         assertEquals(false, testByte.getBit(1).getValue());
         assertEquals(true, testByte.getBit(0).getValue());
 
-        //PureByte testByte = TextByteParser.parse("10111000");
+        //PureByte testByte = ToByteParser.parse("10111000");
     }
 
     @Test
@@ -48,10 +48,41 @@ public class PureByteTest {
     }
 
     @Test
+    public void negation() {
+        PureByte testByte = ToByteParser.parse("00010111");
+        PureByte negated = testByte.negation();
+        assertEquals("11101000", negated.toBinaryString());
+    }
+
+    @Test
+    public void and() {
+        PureByte left  = ToByteParser.parse("11110000");
+        PureByte right = ToByteParser.parse("00111100");
+        PureByte result = left.and(right);
+        assertEquals("00110000", result.toBinaryString());
+    }
+
+    @Test
+    public void or() {
+        PureByte left  = ToByteParser.parse("11110000");
+        PureByte right = ToByteParser.parse("00111100");
+        PureByte result = left.or(right);
+        assertEquals("11111100", result.toBinaryString());
+    }
+
+    @Test
+    public void xor() {
+        PureByte left  = ToByteParser.parse("11110000");
+        PureByte right = ToByteParser.parse("00111100");
+        PureByte result = left.xor(right);
+        assertEquals("11001100", result.toBinaryString());
+    }
+
+    @Test
     public void addBytes(){
-        PureByte left  = TextByteParser.parse("01100011");
-        PureByte right = TextByteParser.parse("00000010");
-        PureByte result = BitsMathHelper.addBits(left, right);
+        PureByte left  = ToByteParser.parse("01100011");
+        PureByte right = ToByteParser.parse("00000010");
+        PureByte result = U2BitsMathHelper.addBits(left, right);
         assertEquals("01100101", result.toBinaryString());
 
     }

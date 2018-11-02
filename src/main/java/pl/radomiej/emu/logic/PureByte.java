@@ -110,4 +110,60 @@ public class PureByte {
     public int getLenght() {
         return bites.length;
     }
+
+    public boolean isZero() {
+        for(PureBit bit : bites){
+            if(bit.getValue()) return false;
+        }
+        return true;
+    }
+
+    public PureByte copy(){
+       PureByte result = new PureByte();
+
+       for(int i = 0; i < bites.length; i++){
+           boolean copyBitValue = !bites[i].getValue();
+           result.setBit(i, copyBitValue);
+       }
+       return result;
+    }
+    public PureByte negation() {
+        PureByte result = new PureByte();
+
+        for(int i = 0; i < bites.length; i++){
+            boolean copyBitValue = !bites[i].getValue();
+            result.setBit(i, copyBitValue);
+        }
+        return result;
+    }
+
+    public PureByte and(PureByte other) {
+        PureByte result = new PureByte();
+
+        for(int i = 0; i < bites.length; i++){
+            boolean copyBitValue = bites[i].getValue() & other.getBit(i).getValue();
+            result.setBit(i, copyBitValue);
+        }
+        return result;
+    }
+
+    public PureByte or(PureByte other) {
+        PureByte result = new PureByte();
+
+        for(int i = 0; i < bites.length; i++){
+            boolean copyBitValue = bites[i].getValue() | other.getBit(i).getValue();
+            result.setBit(i, copyBitValue);
+        }
+        return result;
+    }
+
+    public PureByte xor(PureByte other) {
+        PureByte result = new PureByte();
+
+        for(int i = 0; i < bites.length; i++){
+            boolean copyBitValue = bites[i].getValue() != other.getBit(i).getValue();
+            result.setBit(i, copyBitValue);
+        }
+        return result;
+    }
 }

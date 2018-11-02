@@ -2,7 +2,7 @@ package pl.radomiej.emu.logic.helpers;
 
 import pl.radomiej.emu.logic.PureByte;
 
-public class TextByteParser {
+public class ToByteParser {
     public static PureByte parse(String textByte){
         textByte = textByte.trim();
         int lenght = textByte.length();

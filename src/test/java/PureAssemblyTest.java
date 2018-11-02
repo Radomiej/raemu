@@ -4,7 +4,7 @@ import pl.radomiej.emu.board.optcodes.LoadDirect;
 import pl.radomiej.emu.board.optcodes.LoadMemory;
 import pl.radomiej.emu.integrations.ProgramData;
 
-public class PureBoardTest {
+public class PureAssemblyTest {
 
     @Test
     public void optcodeTest() {
