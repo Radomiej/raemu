@@ -1,6 +1,6 @@
-package pl.radomiej.emu.logic.helpers;
+package pl.radomiej.emu.pure.logic.helpers;
 
-import pl.radomiej.emu.logic.PureByte;
+import pl.radomiej.emu.pure.logic.PureByte;
 
 public class ToByteParser {
     public static PureByte parse(String textByte){

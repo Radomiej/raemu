@@ -1,11 +1,12 @@
-package pl.radomiej.emu.logic;
+package pl.radomiej.emu.pure.logic;
 
-import pl.radomiej.emu.logic.helpers.BitsPermutationHelper;
+import pl.radomiej.emu.logic.RaByte;
+import pl.radomiej.emu.pure.logic.helpers.BitsPermutationHelper;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-public class PureByte {
+public class PureByte implements RaByte {
 
     private PureBit[] bites;
     private boolean defaultValue;
@@ -86,6 +87,7 @@ public class PureByte {
         return bitesCopy;
     }
 
+    @Override
     public String toBinaryString() {
         String result = "";
         for (int i = 0; i < bites.length; i++) {
@@ -108,7 +110,8 @@ public class PureByte {
         return prettyString();
     }
 
-    public int getLenght() {
+    @Override
+    public int getLength() {
         return bites.length;
     }
 
@@ -119,6 +122,7 @@ public class PureByte {
         return true;
     }
 
+    @Override
     public PureByte copy() {
         PureByte result = new PureByte();
 
@@ -169,12 +173,14 @@ public class PureByte {
         return result;
     }
 
+    @Override
     public PureByte shiftLeft() {
         PureByte result = copy();
         result.shiftLeftInternal();
         return result;
     }
 
+    @Override
     public PureByte shiftRight() {
         PureByte result = copy();
         result.shiftRightInternal();
@@ -206,15 +212,6 @@ public class PureByte {
         return sum;
     }
 
-    public boolean lessThan(PureByte other) {
-        for (int i = 0; i < bites.length; i++) {
-            if (other.getBit(i).getValue() && !bites[i].getValue()) return true;
-            else if (!other.getBit(i).getValue() && bites[i].getValue()) return false;
-        }
-
-        return false;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -229,5 +226,30 @@ public class PureByte {
         int result = Objects.hash(defaultValue);
         result = 31 * result + Arrays.hashCode(bites);
         return result;
+    }
+
+    public boolean greaterThan(PureByte other) {
+        return !lessComplex(other, true);
+    }
+
+    public boolean greaterOrEqualsThan(PureByte other) {
+        return !lessComplex(other, false);
+    }
+
+    public boolean lessThan(PureByte other) {
+        return lessComplex(other, false);
+    }
+
+    public boolean lessOrEqualsThan(PureByte other) {
+        return lessComplex(other, true);
+    }
+
+    public boolean lessComplex(PureByte other, boolean checkEqual) {
+        for (int i = 0; i < bites.length; i++) {
+            if (other.getBit(i).getValue() && !bites[i].getValue()) return true;
+            else if (!other.getBit(i).getValue() && bites[i].getValue()) return false;
+        }
+
+        return checkEqual;
     }
 }

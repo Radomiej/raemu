@@ -1,8 +1,6 @@
-package pl.radomiej.emu.logic;
+package pl.radomiej.emu.pure.logic;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class PureMemoryBank {
     private PureByte[] memory;

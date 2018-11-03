@@ -1,19 +1,19 @@
-package pl.radomiej.emu.logic.helpers;
+package pl.radomiej.emu.pure.logic.helpers;
 
-import pl.radomiej.emu.logic.PureByte;
-import pl.radomiej.emu.logic.PureFlags;
+import pl.radomiej.emu.pure.logic.PureByte;
+import pl.radomiej.emu.pure.logic.PureFlags;
 
 public class U2BitsMathHelper {
-    public static PureByte addBits(PureByte left, PureByte right){
-        return addBits(left, right, null);
+    public static PureByte add(PureByte left, PureByte right){
+        return add(left, right, null);
     }
 
-    public static PureByte addBits(PureByte left, PureByte right, PureFlags flags){
+    public static PureByte add(PureByte left, PureByte right, PureFlags flags){
         PureByte result = new PureByte();
         boolean carry = false;
 
         // Add all bits one by one
-        for (int i = left.getLenght() -1 ; i >= 0 ; i--)
+        for (int i = left.getLength() -1; i >= 0 ; i--)
         {
             boolean firstBit = left.getBit(i).getValue();
             boolean secondBit = right.getBit(i).getValue();
@@ -39,28 +39,38 @@ public class U2BitsMathHelper {
 
         return result;
     }
-    static public PureByte subtract2(PureByte x, PureByte y)
+
+    static public PureByte subtract2(PureByte x, PureByte y){
+        return subtract2(x,y, null);
+    }
+
+    static public PureByte subtract2(PureByte x, PureByte y, PureFlags flags)
     {
+        if(flags != null && x.lessThan(y)) flags.setOverflow(true);
+
         while(!y.isZero()){
             PureByte borrow = x.negation().and(y);
-            x = x.or(y);
+            x = x.xor(y);
             y = borrow.shiftLeft();
         }
-
 
         return x;
     }
 
-    static public PureByte subtract(PureByte x, PureByte y)
+    static public PureByte subtract(PureByte x, PureByte y){
+        return subtract(x,y, null);
+    }
+
+    static public PureByte subtract(PureByte x, PureByte y, PureFlags flags)
     {
+        if(flags != null && x.lessThan(y)) flags.setOverflow(true);
 
         PureByte complement = y.negation();
-        PureByte increment = new PureByte(complement.getLenght());
-        increment.setBit(complement.getLenght() - 1, true);
-        complement = addBits(complement, increment);
-        PureByte result = addBits(x, complement);
+        PureByte increment = new PureByte(complement.getLength());
+        increment.setBit(complement.getLength() - 1, true);
+        complement = add(complement, increment);
+        PureByte result = add(x, complement);
 
-//        if(incremental) result
         return result;
     }
 

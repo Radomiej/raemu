@@ -1,7 +1,7 @@
 import org.junit.Test;
-import pl.radomiej.emu.logic.PureByte;
-import pl.radomiej.emu.logic.helpers.ToByteParser;
-import pl.radomiej.emu.logic.helpers.U2BitsMathHelper;
+import pl.radomiej.emu.pure.logic.PureByte;
+import pl.radomiej.emu.pure.logic.helpers.ToByteParser;
+import pl.radomiej.emu.pure.logic.helpers.U2BitsMathHelper;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -48,106 +48,219 @@ public class U2PureByteTest {
     }
 
     @Test
-    public void negation() {
+    public void negationTest() {
         PureByte testByte = ToByteParser.parse("00010111");
         PureByte negated = testByte.negation();
         assertEquals("11101000", negated.toBinaryString());
+
+        for (int x = 0; x <= 255; x++) {
+            PureByte byteX = ToByteParser.parse(x);
+            PureByte addResult = byteX.negation();
+            assertEquals(ToByteParser.parse(~x).toUnsignedInteger(), addResult.toUnsignedInteger());
+        }
     }
 
     @Test
-    public void and() {
-        PureByte left  = ToByteParser.parse("11110000");
+    public void andTest() {
+        PureByte left = ToByteParser.parse("11110000");
         PureByte right = ToByteParser.parse("00111100");
         PureByte result = left.and(right);
         assertEquals("00110000", result.toBinaryString());
+
+        for (int x = 0; x <= 255; x++) {
+            for (int y = 0; y <= 255; y++) {
+                PureByte byteX = ToByteParser.parse(x);
+                PureByte byteY = ToByteParser.parse(y);
+                PureByte addResult = byteX.and(byteY);
+                assertEquals(ToByteParser.parse(x & y).toUnsignedInteger(), addResult.toUnsignedInteger());
+            }
+        }
     }
 
     @Test
-    public void or() {
-        PureByte left  = ToByteParser.parse("11110000");
+    public void orTest() {
+        PureByte left = ToByteParser.parse("11110000");
         PureByte right = ToByteParser.parse("00111100");
         PureByte result = left.or(right);
         assertEquals("11111100", result.toBinaryString());
+
+        for (int x = 0; x <= 255; x++) {
+            for (int y = 0; y <= 255; y++) {
+                PureByte byteX = ToByteParser.parse(x);
+                PureByte byteY = ToByteParser.parse(y);
+                PureByte addResult = byteX.or(byteY);
+                assertEquals(ToByteParser.parse(x | y).toUnsignedInteger(), addResult.toUnsignedInteger());
+            }
+        }
     }
 
     @Test
-    public void xor() {
-        PureByte left  = ToByteParser.parse("11110000");
+    public void xorTest() {
+        PureByte left = ToByteParser.parse("11110000");
         PureByte right = ToByteParser.parse("00111100");
         PureByte result = left.xor(right);
         assertEquals("11001100", result.toBinaryString());
+
+        for (int x = 0; x <= 255; x++) {
+            for (int y = 0; y <= 255; y++) {
+                PureByte byteX = ToByteParser.parse(x);
+                PureByte byteY = ToByteParser.parse(y);
+                PureByte addResult = byteX.xor(byteY);
+                assertEquals(ToByteParser.parse(x ^ y).toUnsignedInteger(), addResult.toUnsignedInteger());
+            }
+        }
     }
 
     @Test
-    public void addUnsignedBytes(){
-        PureByte left  = ToByteParser.parse("01100011");
+    public void addUnsignedBytesTest() {
+        PureByte left = ToByteParser.parse("01100011");
         PureByte right = ToByteParser.parse("00000010");
-        PureByte result = U2BitsMathHelper.addBits(left, right);
+        PureByte result = U2BitsMathHelper.add(left, right);
         assertEquals("01100101", result.toBinaryString());
 
-        for(int x = 0; x <= 255; x++){
-            for(int y = 0; y <= 255; y++){
+        for (int x = 0; x <= 255; x++) {
+            for (int y = 0; y <= 255; y++) {
                 PureByte byteX = ToByteParser.parse(x);
                 PureByte byteY = ToByteParser.parse(y);
-                PureByte addResult = U2BitsMathHelper.addBits(byteX, byteY);
+                PureByte addResult = U2BitsMathHelper.add(byteX, byteY);
                 assertEquals(ToByteParser.parse(x + y).toUnsignedInteger(), addResult.toUnsignedInteger());
             }
         }
     }
 
     @Test
-    public void addBytesOverflow(){
-        PureByte left  = ToByteParser.parse("11111111");
+    public void addBytesOverflowTest() {
+        PureByte left = ToByteParser.parse("11111111");
         PureByte right = ToByteParser.parse("00000010");
-        PureByte result = U2BitsMathHelper.addBits(left, right);
+        PureByte result = U2BitsMathHelper.add(left, right);
         assertEquals("00000001", result.toBinaryString());
     }
 
     @Test
-    public void subtractUnsignedBytes(){
-        PureByte left  = ToByteParser.parse("00000101");
+    public void subtractUnsignedBytes() {
+        PureByte left = ToByteParser.parse("00000101");
         PureByte right = ToByteParser.parse("00000011");
         PureByte result = U2BitsMathHelper.subtract(left, right);
         assertEquals("00000010", result.toBinaryString());
 
-        for(int x = 0; x <= 255; x++){
-            for(int y = 0; y <= 255; y++){
+        for (int x = 0; x <= 255; x++) {
+            for (int y = 0; y <= 255; y++) {
                 PureByte byteX = ToByteParser.parse(x);
                 PureByte byteY = ToByteParser.parse(y);
                 PureByte subtractResult = U2BitsMathHelper.subtract(byteX, byteY);
-//                System.out.println("substract x: " + byteX + " y: " + byteY + " result: " + subtractResult.toSignedInteger());
                 assertEquals(ToByteParser.parse(x - y).toUnsignedInteger(), subtractResult.toUnsignedInteger());
             }
         }
-        assertEquals(2, U2BitsMathHelper.subtractOrg(5,3));
-        assertEquals(-8, U2BitsMathHelper.subtractOrg(-5,3));
-
     }
 
     @Test
-    public void subtractBytes2(){
-        PureByte left  = ToByteParser.parse("00000101");
+    public void subtractVersion2UnsignedBytesTest() {
+        PureByte left = ToByteParser.parse("00000101");
         PureByte right = ToByteParser.parse("00000011");
-        PureByte result = U2BitsMathHelper.subtract(left, right);
+        PureByte result = U2BitsMathHelper.subtract2(left, right);
         assertEquals("00000010", result.toBinaryString());
 
-        assertEquals(2, U2BitsMathHelper.subtractOrg(5,3));
-
+        for (int x = 0; x <= 255; x++) {
+            for (int y = 0; y <= 255; y++) {
+                PureByte byteX = ToByteParser.parse(x);
+                PureByte byteY = ToByteParser.parse(y);
+                PureByte subtractResult = U2BitsMathHelper.subtract2(byteX, byteY);
+                assertEquals(ToByteParser.parse(x - y).toUnsignedInteger(), subtractResult.toUnsignedInteger());
+            }
+        }
     }
 
     @Test
-    public void copy(){
-        PureByte left  = ToByteParser.parse("01100011");
+    public void copyTest() {
+        PureByte left = ToByteParser.parse("01100011");
         PureByte result = left.copy();
         assertEquals("01100011", result.toBinaryString());
 
+        for (int x = 0; x <= 255; x++) {
+            PureByte byteX = ToByteParser.parse(x);
+            PureByte addResult = byteX.copy();
+            assertEquals(ToByteParser.parse(x).toUnsignedInteger(), addResult.toUnsignedInteger());
+        }
+
     }
 
     @Test
-    public void shiftLeft(){
-        PureByte left  = ToByteParser.parse("01100011");
+    public void shiftLeftTest() {
+        PureByte left = ToByteParser.parse("01100011");
         PureByte result = left.shiftLeft();
         assertEquals("11000110", result.toBinaryString());
 
+        for (int x = 0; x <= 255; x++) {
+            PureByte byteX = ToByteParser.parse(x);
+            PureByte addResult = byteX.shiftLeft();
+            assertEquals(ToByteParser.parse(x << 1).toUnsignedInteger(), addResult.toUnsignedInteger());
+        }
+    }
+
+    @Test
+    public void shiftLeftInternalTest() {
+        PureByte left = ToByteParser.parse("01100011");
+        PureByte result = left.shiftLeft();
+        assertEquals("11000110", result.toBinaryString());
+
+        for (int x = 0; x <= 255; x++) {
+            PureByte byteX = ToByteParser.parse(x);
+            byteX.shiftLeftInternal();
+            assertEquals(ToByteParser.parse(x << 1).toUnsignedInteger(), byteX.toUnsignedInteger());
+        }
+    }
+
+    @Test
+    public void lessTest() {
+        for (int x = 0; x <= 255; x++) {
+            for (int y = 0; y <= 255; y++) {
+                PureByte byteX = ToByteParser.parse(x);
+                PureByte byteY = ToByteParser.parse(y);
+                assertEquals(x < y, byteX.lessThan(byteY));
+            }
+        }
+    }
+
+    @Test
+    public void lessEqualsTest() {
+        for (int x = 0; x <= 255; x++) {
+            for (int y = 0; y <= 255; y++) {
+                PureByte byteX = ToByteParser.parse(x);
+                PureByte byteY = ToByteParser.parse(y);
+                assertEquals(x <= y, byteX.lessOrEqualsThan(byteY));
+            }
+        }
+    }
+
+    @Test
+    public void graterOrEqualsTest() {
+        for (int x = 0; x <= 255; x++) {
+            for (int y = 0; y <= 255; y++) {
+                PureByte byteX = ToByteParser.parse(x);
+                PureByte byteY = ToByteParser.parse(y);
+                assertEquals(x >= y, byteX.greaterOrEqualsThan(byteY));
+            }
+        }
+    }
+
+    @Test
+    public void graterTest() {
+        for (int x = 0; x <= 255; x++) {
+            for (int y = 0; y <= 255; y++) {
+                PureByte byteX = ToByteParser.parse(x);
+                PureByte byteY = ToByteParser.parse(y);
+                assertEquals(x > y, byteX.greaterThan(byteY));
+            }
+        }
+    }
+
+    @Test
+    public void parseTest() {
+        PureByte byte0 = ToByteParser.parse(0);
+        assertEquals(true, byte0.isZero());
+
+        for(int i = 1; i < 255; i++){
+
+        }
     }
 }
