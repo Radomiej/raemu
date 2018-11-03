@@ -2,6 +2,7 @@ package pl.radomiej.emu.logic;
 
 public class PureFlags {
     private boolean carry;
+    private boolean overflow;
 
     public boolean isCarry() {
         return carry;
@@ -9,5 +10,13 @@ public class PureFlags {
 
     public void setCarry(boolean carry) {
         this.carry = carry;
+    }
+
+    public boolean isOverflow() {
+        return overflow;
+    }
+
+    public void setOverflow(boolean overflow) {
+        this.overflow = overflow;
     }
 }

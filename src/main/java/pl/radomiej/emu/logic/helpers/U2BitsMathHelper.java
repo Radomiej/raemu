@@ -39,17 +39,32 @@ public class U2BitsMathHelper {
 
         return result;
     }
-    static PureByte subtract(PureByte x, PureByte y)
+    static public PureByte subtract2(PureByte x, PureByte y)
     {
-        PureByte result = new PureByte();
         while(!y.isZero()){
             PureByte borrow = x.negation().and(y);
+            x = x.or(y);
+            y = borrow.shiftLeft();
         }
 
 
+        return x;
+    }
+
+    static public PureByte subtract(PureByte x, PureByte y)
+    {
+
+        PureByte complement = y.negation();
+        PureByte increment = new PureByte(complement.getLenght());
+        increment.setBit(complement.getLenght() - 1, true);
+        complement = addBits(complement, increment);
+        PureByte result = addBits(x, complement);
+
+//        if(incremental) result
         return result;
     }
-    static int subtract(int x, int y)
+
+    public static int subtractOrg(int x, int y)
     {
 
         // Iterate till there
