@@ -1,6 +1,6 @@
-package pl.radomiej.emu.pure.logic.helpers;
+package pl.radomiej.emu.logic.helpers;
 
-import pl.radomiej.emu.pure.logic.PureByte;
+import pl.radomiej.emu.logic.pure.PureByte;
 
 public class ToByteParser {
     public static PureByte parse(String textByte){
@@ -16,6 +16,7 @@ public class ToByteParser {
     public static PureByte parse32(int bit32){
         return parse(Integer.toBinaryString(bit32));
     }
+
     public static PureByte parse(int bit8){
         String s2 = String.format("%8s", Integer.toBinaryString(bit8 & 0xFF)).replace(' ', '0');
         return parse(s2);

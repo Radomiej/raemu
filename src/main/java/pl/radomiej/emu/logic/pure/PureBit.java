@@ -1,4 +1,4 @@
-package pl.radomiej.emu.pure.logic;
+package pl.radomiej.emu.logic.pure;
 
 import java.util.Objects;
 

@@ -1,6 +1,6 @@
 package pl.radomiej.emu.integrations;
 
-import pl.radomiej.emu.pure.logic.Optcode;
+import pl.radomiej.emu.logic.Optcode;
 
 import java.util.ArrayList;
 import java.util.HashMap;

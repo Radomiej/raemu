@@ -1,7 +1,7 @@
-package pl.radomiej.emu.pure.logic;
+package pl.radomiej.emu.logic.pure;
 
 import pl.radomiej.emu.logic.RaByte;
-import pl.radomiej.emu.pure.logic.helpers.BitsPermutationHelper;
+import pl.radomiej.emu.logic.helpers.BitsPermutationHelper;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -22,6 +22,13 @@ public class PureByte implements RaByte {
     public PureByte(int numberOfBites, boolean defaultValue) {
         this.defaultValue = defaultValue;
         bites = new PureBit[numberOfBites];
+        for (int i = 0; i < numberOfBites; i++) {
+            bites[i] = new PureBit(defaultValue);
+        }
+    }
+
+    public PureByte(int numberOfBites, PureByte bitesToCopy) {
+        this(numberOfBites, bitesToCopy.defaultValue);
         for (int i = 0; i < numberOfBites; i++) {
             bites[i] = new PureBit(defaultValue);
         }

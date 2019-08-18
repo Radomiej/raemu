@@ -1,3 +1,5 @@
+package pl.radomiej.emu;
+
 import org.junit.Test;
 import pl.radomiej.emu.board.PureCPU;
 import pl.radomiej.emu.board.optcodes.LoadDirect;

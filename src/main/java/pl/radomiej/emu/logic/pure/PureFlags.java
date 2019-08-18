@@ -1,4 +1,4 @@
-package pl.radomiej.emu.pure.logic;
+package pl.radomiej.emu.logic.pure;
 
 public class PureFlags {
     private boolean carry;

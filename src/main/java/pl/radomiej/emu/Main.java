@@ -1,6 +1,5 @@
 package pl.radomiej.emu;
 
-import pl.radomiej.emu.board.z80.Z80;
 
 public class Main {
 

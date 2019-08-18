@@ -1,7 +1,10 @@
+package pl.radomiej.emu.logic;
+
 import org.junit.Test;
-import pl.radomiej.emu.pure.logic.PureByte;
-import pl.radomiej.emu.pure.logic.helpers.ToByteParser;
-import pl.radomiej.emu.pure.logic.helpers.U2BitsMathHelper;
+import pl.radomiej.emu.logic.pure.PureByte;
+import pl.radomiej.emu.logic.pure.PureFlags;
+import pl.radomiej.emu.logic.helpers.ToByteParser;
+import pl.radomiej.emu.logic.helpers.U2BitsMathHelper;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -117,6 +120,13 @@ public class U2PureByteTest {
         PureByte right = ToByteParser.parse("00000010");
         PureByte result = U2BitsMathHelper.add(left, right);
         assertEquals("01100101", result.toBinaryString());
+
+        PureFlags flag = new PureFlags();
+        left = ToByteParser.parse("11111110");
+        right = ToByteParser.parse("00000010");
+        result = U2BitsMathHelper.add(left, right, flag);
+        assertEquals("00000000", result.toBinaryString());
+        assertEquals(true, flag.isCarry());
 
         for (int x = 0; x <= 255; x++) {
             for (int y = 0; y <= 255; y++) {
@@ -259,8 +269,29 @@ public class U2PureByteTest {
         PureByte byte0 = ToByteParser.parse(0);
         assertEquals(true, byte0.isZero());
 
-        for(int i = 1; i < 255; i++){
+        for (int i = 1; i < 255; i++) {
+            PureByte parse = ToByteParser.parse(i);
+            assertEquals(i, parse.toUnsignedInteger());
+        }
+    }
 
+    @Test
+    public void multiplyTest() {
+        for (int x = 0; x <= 255; x++) {
+            for (int y = 0; y <= 255; y++) {
+                PureFlags flag = new PureFlags();
+                PureByte byteX = ToByteParser.parse(x);
+                PureByte byteY = ToByteParser.parse(y);
+                if(x == 2 && y == 128){
+                    System.out.println("Test");
+                }
+                PureByte result = U2BitsMathHelper.multiply(byteX, byteY, flag);
+                System.out.println("x: " + x + " y: " + y + " = " + result.toString());
+
+                int testResult = x * y;
+//                if(testResult > 255) testResult %= 255;
+                assertEquals((byte)testResult, (byte)result.toUnsignedInteger());
+            }
         }
     }
 }
