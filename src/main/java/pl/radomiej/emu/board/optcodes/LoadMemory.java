@@ -14,6 +14,6 @@ public class LoadMemory implements Optcode<PureCPU> {
     @Override
     public void execute(PureCPU pureCPU) {
         PureByte value = pureCPU.getMemory().getByIndex(from);
-        pureCPU.getMemory().getByIndex(0).setBites(value);
+        pureCPU.getMemory().setByIndex(0, value);
     }
 }

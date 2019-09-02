@@ -9,7 +9,8 @@ public class U2BitsMathHelper {
     }
 
     public static PureByte add(PureByte left, PureByte right, PureFlags flags) {
-        PureByte result = new PureByte();
+        int maxBits = Math.max(left.getLength(), right.getLength());
+        PureByte result = new PureByte(maxBits);
         boolean carry = false;
 
         // Add all bits one by one
@@ -160,52 +161,30 @@ public class U2BitsMathHelper {
         return result;
     }
 
-    static public PureByte multiply(PureByte x, PureByte y, PureFlags flags) {
+    static public PureByte multiply(PureByte left, PureByte right, PureFlags flags) {
+        int maxBits = Math.max(left.getLength(), right.getLength());
+        int computeLength = maxBits * 2;
 
         if (flags == null) flags = new PureFlags();
-        PureByte one = new PureByte(x.getLength());
-        one = increment(one);
-
-        PureByte a = x.copy();
-        PureByte b = y.copy();
-        PureByte result = new PureByte(x.getLength());
-        while (!b.isZero()) {
-            if (!b.and(one).isZero()) {
-                result = add(result, a, flags);
-            }
-
-
-            a.rotateBitesLeft(1);
-            b = b.shiftRight();
-        }
-
-        if (flags.isCarry()) result = decrement(result);
-        return result;
-    }
-
-    static public PureByte multiply2(PureByte x, PureByte y, PureFlags flags) {
-        int computeLength = x.getLength() > y.getLength() ? x.getLength() : y.getLength();
-        computeLength *= 2;
-
-        if (flags == null) flags = new PureFlags();
-        PureByte one = new PureByte(x.getLength());
+        PureByte one = new PureByte(left.getLength());
         one = increment(one);
 
 
-        PureByte a = new PureByte(computeLength, x);
-        PureByte b = y.copy();
-        PureByte result = new PureByte(computeLength);
+        PureByte a = new PureByte(computeLength, left);
+        PureByte b = right.copy();
+        PureByte score = new PureByte(computeLength);
         while (!b.isZero()) {
             if (!b.and(one).isZero()) {
-                result = add(result, a, flags);
+                score = add(score, a, flags);
             }
 
 
-            a.rotateBitesLeft(1);
+            a = a.rotateBitesLeft(1);
             b = b.shiftRight();
         }
 
-        if (flags.isCarry()) result = decrement(result);
+        PureByte result = alignRight(score, maxBits);
+        if(score.greaterThan(alignRight(result, computeLength))) flags.setCarry(true);
         return result;
     }
 

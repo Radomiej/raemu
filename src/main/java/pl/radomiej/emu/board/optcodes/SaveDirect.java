@@ -2,8 +2,8 @@ package pl.radomiej.emu.board.optcodes;
 
 import pl.radomiej.emu.board.PureCPU;
 import pl.radomiej.emu.logic.Optcode;
-import pl.radomiej.emu.logic.pure.PureByte;
 import pl.radomiej.emu.logic.helpers.ToByteParser;
+import pl.radomiej.emu.logic.pure.PureByte;
 
 public class SaveDirect implements Optcode<PureCPU> {
     private final PureByte value;
@@ -21,6 +21,6 @@ public class SaveDirect implements Optcode<PureCPU> {
 
     @Override
     public void execute(PureCPU pureCPU) {
-        pureCPU.getMemory().getByIndex(to).setBites(value);
+        pureCPU.getMemory().setByIndex(0, value);
     }
 }

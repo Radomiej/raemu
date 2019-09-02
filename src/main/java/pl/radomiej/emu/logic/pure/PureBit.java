@@ -2,61 +2,46 @@ package pl.radomiej.emu.logic.pure;
 
 import java.util.Objects;
 
-public class PureBit {
-    private boolean value;
+public enum PureBit {
+    ZERO(false), ONE(true);
 
-    public PureBit() {
-        this(false);
+    private final boolean value;
+
+    PureBit(boolean initValue) {
+        value = initValue;
     }
 
-    public PureBit(boolean defaultValues) {
-        value = defaultValues;
+    public static PureBit getValueFor(boolean value) {
+        return value ? ONE : ZERO;
     }
 
-    public void setValue(boolean newValue){
-        value = newValue;
-    }
-
-    public boolean getValue(){
+    public boolean getValue() {
         return value;
     }
 
     //One argument operation
-    public void negateNOR(){
-        value = !value;
+    public PureBit negateNOR() {
+        return PureBit.getValueFor(!value);
     }
 
     //Two argument operations
-    public boolean and(boolean otherBit){
-        if(value && otherBit) return true;
+    public boolean and(boolean otherBit) {
+        if (value && otherBit) return true;
         return false;
     }
 
-    public boolean or(boolean otherBit){
-        if(!value && !otherBit) return false;
+    public boolean or(boolean otherBit) {
+        if (!value && !otherBit) return false;
         return true;
     }
 
-    public boolean xor(boolean otherBit){
-        if(value != otherBit) return true;
+    public boolean xor(boolean otherBit) {
+        if (value != otherBit) return true;
         return false;
     }
 
     @Override
     public String toString() {
         return value ? "1" : "0";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PureBit pureBit = (PureBit) o;
-        return value == pureBit.value;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(value);
     }
 }

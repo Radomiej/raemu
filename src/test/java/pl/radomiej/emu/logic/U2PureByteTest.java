@@ -30,17 +30,17 @@ public class U2PureByteTest {
 
 
         PureByte testByte = ToByteParser.parse("00010111");
-        testByte.rotateBitesLeft(3);
+        PureByte resultByte = testByte.rotateBitesLeft(3);
         System.out.print(testByte.toBinaryString());
         // assert statements
-        assertEquals(false, testByte.getBit(7).getValue());
-        assertEquals(false, testByte.getBit(6).getValue());
-        assertEquals(false, testByte.getBit(5).getValue());
-        assertEquals(true, testByte.getBit(4).getValue());
-        assertEquals(true, testByte.getBit(3).getValue());
-        assertEquals(true, testByte.getBit(2).getValue());
-        assertEquals(false, testByte.getBit(1).getValue());
-        assertEquals(true, testByte.getBit(0).getValue());
+        assertEquals(false, resultByte.getBit(7).getValue());
+        assertEquals(false, resultByte.getBit(6).getValue());
+        assertEquals(false, resultByte.getBit(5).getValue());
+        assertEquals(true, resultByte.getBit(4).getValue());
+        assertEquals(true, resultByte.getBit(3).getValue());
+        assertEquals(true, resultByte.getBit(2).getValue());
+        assertEquals(false, resultByte.getBit(1).getValue());
+        assertEquals(true, resultByte.getBit(0).getValue());
 
         //PureByte testByte = ToByteParser.parse("10111000");
     }
@@ -123,11 +123,22 @@ public class U2PureByteTest {
         assertEquals("00000000", result.toBinaryString());
         assertEquals(true, flag.isCarry());
 
+
+    }
+
+    @Test
+    public void addUnsignedBytesTest2() {
         for (int x = 0; x <= 255; x++) {
             for (int y = 0; y <= 255; y++) {
                 PureByte byteX = ToByteParser.parse(x);
                 PureByte byteY = ToByteParser.parse(y);
-                PureByte addResult = U2BitsMathHelper.add(byteX, byteY);
+                PureFlags flags = new PureFlags();
+
+                PureByte addResult = U2BitsMathHelper.add(byteX, byteY, flags);
+
+                boolean carryFlagShouldBe = x + y > 255 ? true : false;
+
+                assertEquals(carryFlagShouldBe, flags.isCarry());
                 assertEquals(ToByteParser.parse(x + y).toUnsignedInteger(), addResult.toUnsignedInteger());
             }
         }
@@ -271,16 +282,23 @@ public class U2PureByteTest {
     }
 
     @Test
-    public void multiplyTest() {
+    public void multiply_For8Bit_Test() {
         for (int x = 0; x <= 255; x++) {
             for (int y = 0; y <= 255; y++) {
                 PureFlags flag = new PureFlags();
                 PureByte byteX = ToByteParser.parse(x);
                 PureByte byteY = ToByteParser.parse(y);
+
+
+                if(x == 2 && y == 128){
+                    System.out.println("DeBUG");
+                }
                 PureByte result = U2BitsMathHelper.multiply(byteX, byteY, flag);
-                System.out.println("x: " + x + " y: " + y + " = " + result.toString());
+                System.out.println(x + " * " + y + " = " + result.toString());
 
                 int testResult = x * y;
+                boolean flagShouldBe = x * y > 255;
+                assertEquals(flagShouldBe, flag.isCarry());
                 assertEquals((byte) testResult, (byte) result.toUnsignedInteger());
             }
         }
