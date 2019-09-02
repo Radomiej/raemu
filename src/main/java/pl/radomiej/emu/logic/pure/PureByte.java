@@ -8,6 +8,9 @@ import java.util.Objects;
 
 public class PureByte implements RaByte {
 
+    /**
+     *  [N+1][N][1][0]
+     */
     private PureBit[] bites;
     private boolean defaultValue;
 
@@ -258,5 +261,13 @@ public class PureByte implements RaByte {
         }
 
         return checkEqual;
+    }
+
+    public boolean getLeftmostBit(){
+        return bites[bites.length - 1].getValue();
+    }
+
+    public boolean getRightmostBit(){
+        return bites[0].getValue();
     }
 }
