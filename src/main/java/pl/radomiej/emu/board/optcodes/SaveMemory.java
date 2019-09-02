@@ -14,6 +14,6 @@ public class SaveMemory implements Optcode<PureCPU> {
     @Override
     public void execute(PureCPU pureCPU) {
         PureByte value = pureCPU.getMemory().getByIndex(0);
-        pureCPU.getMemory().getByIndex(to).setBites(value);
+        pureCPU.getMemory().setByIndex(to, value);
     }
 }

@@ -8,8 +8,11 @@ import java.util.Objects;
 
 public class PureByte implements RaByte {
 
-    private PureBit[] bites;
-    private boolean defaultValue;
+    /**
+     *  [N+1][N][1][0]
+     */
+    private final PureBit[] bites;
+    private final boolean defaultValue;
 
     public PureByte() {
         this(8, false);
@@ -23,14 +26,27 @@ public class PureByte implements RaByte {
         this.defaultValue = defaultValue;
         bites = new PureBit[numberOfBites];
         for (int i = 0; i < numberOfBites; i++) {
-            bites[i] = new PureBit(defaultValue);
+            bites[i] = PureBit.getValueFor(defaultValue);
         }
     }
 
-    public PureByte(int numberOfBites, PureByte bitesToCopy) {
-        this(numberOfBites, bitesToCopy.defaultValue);
+    public PureByte(int numberOfBites, final PureByte byteToCopy) {
+        this(numberOfBites, byteToCopy.defaultValue);
+
+        int bitesToCopy = Math.min(numberOfBites, byteToCopy.getLength());
+        int copyOffset = 1;
+
+        for (int i = numberOfBites - 1; i >= 0 && bitesToCopy > 0; i--, bitesToCopy--, copyOffset++) {
+            bites[i] = PureBit.getValueFor(byteToCopy.getBit(byteToCopy.getLength() - copyOffset).getValue());
+        }
+    }
+
+    public PureByte(PureBit[] bitesToSet) {
+        this(bitesToSet.length);
+        int numberOfBites = bitesToSet.length;
+
         for (int i = 0; i < numberOfBites; i++) {
-            bites[i] = new PureBit(defaultValue);
+            bites[i] = PureBit.getValueFor(bitesToSet[i].getValue());
         }
     }
 
@@ -40,58 +56,45 @@ public class PureByte implements RaByte {
         for (int i = bites.length - 1; i > 0; i--) {
             bites[i] = bites[i - 1];
         }
-        bites[0] = new PureBit(defaultValue);
+        bites[0] = PureBit.getValueFor(defaultValue);
     }
 
     public void shiftLeftInternal() {
         for (int i = 0; i < bites.length - 1; i++) {
             bites[i] = bites[i + 1];
         }
-        bites[bites.length - 1] = new PureBit(defaultValue);
+        bites[bites.length - 1] = PureBit.getValueFor(defaultValue);
     }
 
     public void moveRightArthmetic() {
         for (int i = 0; i < bites.length - 1; i++) {
             bites[i] = bites[i + 1];
         }
-        bites[bites.length - 1] = new PureBit(!defaultValue);
+        bites[bites.length - 1] = PureBit.getValueFor(defaultValue);
     }
 
-    public void rotateBitesLeft(int rotateMidleBitIndex) {
-        bites = BitsPermutationHelper.circularShiftSingle(bites, rotateMidleBitIndex, false);
+    public PureByte rotateBitesLeft(int rotateMiddleBitIndex) {
+        PureBit[] resultBites = BitsPermutationHelper.circularShiftSingle(bites, rotateMiddleBitIndex, false);
+        return new PureByte(resultBites);
     }
 
-    public void rotateBitesRight(int rotateMidleBitIndex) {
-        bites = BitsPermutationHelper.circularShiftSingle(bites, rotateMidleBitIndex, true);
+    public PureByte rotateBitesRight(int rotateMiddleBitIndex) {
+        PureBit[] resultBites = BitsPermutationHelper.circularShiftSingle(bites, rotateMiddleBitIndex, true);
+        return new PureByte(resultBites);
     }
 
-    public void setBit(int index, boolean setValue) {
-        bites[index].setValue(setValue);
+    public PureByte setBit(int index, boolean setValue) {
+        PureBit[] resultBites = BitsPermutationHelper.copy(bites);
+        bites[index] = PureBit.getValueFor(setValue);
+        return new PureByte(resultBites);
     }
 
     public PureBit getBit(int index) {
-        return new PureBit(bites[index].getValue());
-    }
-
-    public void setBites(PureBit[] setBites) {
-        for (int i = 0; i < bites.length; i++) {
-            bites[i].setValue(setBites[i].getValue());
-        }
-    }
-
-    public void setBites(PureByte fromBytes) {
-        for (int i = 0; i < bites.length; i++) {
-            bites[i].setValue(fromBytes.getBit(i).getValue());
-        }
+        return bites[index];
     }
 
     public PureBit[] getBites() {
-        PureBit[] bitesCopy = new PureBit[bites.length];
-        for (int i = 0; i < bites.length; i++) {
-            bitesCopy[i] = new PureBit(bites[i].getValue());
-        }
-        //System.arraycopy( bites, 0, bitesCopy, 0, bites.length );
-        return bitesCopy;
+        return BitsPermutationHelper.copy(bites);
     }
 
     @Override
@@ -252,11 +255,20 @@ public class PureByte implements RaByte {
     }
 
     public boolean lessComplex(PureByte other, boolean checkEqual) {
+        if(other.getLength() != getLength()) throw new UnsupportedOperationException("Bytes to compare must have the same amount of bits!");
         for (int i = 0; i < bites.length; i++) {
             if (other.getBit(i).getValue() && !bites[i].getValue()) return true;
             else if (!other.getBit(i).getValue() && bites[i].getValue()) return false;
         }
 
         return checkEqual;
+    }
+
+    public boolean getLeftmostBit(){
+        return bites[bites.length - 1].getValue();
+    }
+
+    public boolean getRightmostBit(){
+        return bites[0].getValue();
     }
 }

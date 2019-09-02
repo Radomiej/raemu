@@ -4,6 +4,8 @@ import pl.radomiej.emu.logic.pure.PureBit;
 
 public class BitsPermutationHelper {
     public static PureBit[] circularShiftSingle(PureBit[] array, int shift, boolean right) {
+        array = copy(array); //Defensive copy
+
         PureBit[] array2 = new PureBit[shift];
         if(right) {
             for (int i = 0;i < shift;i++)
@@ -22,5 +24,13 @@ public class BitsPermutationHelper {
             }
         }
         return array;
+    }
+
+    public static PureBit[] copy(PureBit[] bites) {
+        PureBit[] copyBites = new PureBit[bites.length];
+        for(int i = 0; i < bites.length; i++){
+            copyBites[i] = bites[i];
+        }
+        return copyBites;
     }
 }

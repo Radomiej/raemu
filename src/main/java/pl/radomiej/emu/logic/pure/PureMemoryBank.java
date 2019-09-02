@@ -36,4 +36,8 @@ public class PureMemoryBank {
     public PureByte getByIndex(int index) {
         return memory[index];
     }
+
+    public void setByIndex(int index, PureByte byteToSet) {
+        memory[index] = byteToSet;
+    }
 }

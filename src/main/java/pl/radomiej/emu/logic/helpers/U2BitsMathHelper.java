@@ -9,7 +9,8 @@ public class U2BitsMathHelper {
     }
 
     public static PureByte add(PureByte left, PureByte right, PureFlags flags) {
-        PureByte result = new PureByte();
+        int maxBits = Math.max(left.getLength(), right.getLength());
+        PureByte result = new PureByte(maxBits);
         boolean carry = false;
 
         // Add all bits one by one
@@ -73,52 +74,117 @@ public class U2BitsMathHelper {
         return result;
     }
 
-    static public PureByte multiply(PureByte x, PureByte y, PureFlags flags) {
-
-        if(flags == null) flags = new PureFlags();
-        PureByte one = new PureByte(x.getLength());
-        one = increment(one);
+    //TODO Add support for flags
+    static public PureByte divide(PureByte x, PureByte y, PureFlags flags) {
+        if (flags == null) flags = new PureFlags();
 
         PureByte a = x.copy();
         PureByte b = y.copy();
-        PureByte result = new PureByte(x.getLength());
-        while (!b.isZero()) {
-            if(!b.and(one).isZero()){
-                result = add(result, a, flags);
+
+        //Prepare
+        int maxBits = Math.max(a.getLength(), b.getLength());
+
+        PureByte quotient = new PureByte(maxBits);
+        PureByte partial = new PureByte(maxBits);
+        PureByte dividend = alignLeft(a, maxBits);
+        PureByte divisor = alignLeft(b, maxBits);
+
+        for (int leftmostIndex = 0; leftmostIndex < maxBits; leftmostIndex++) {
+            boolean dividendBit = dividend.getBit(leftmostIndex).getValue();
+            boolean divisorBit = divisor.getBit(leftmostIndex).getValue();
+
+            partial = partial.shiftLeft();
+            if (dividendBit) partial = increment(partial);
+
+            boolean bitToSetInQuotient = partial.greaterOrEqualsThan(divisor);
+            quotient.setBit(leftmostIndex, bitToSetInQuotient);
+            if (bitToSetInQuotient) {
+                partial = subtract(partial, divisor);
             }
 
-
-            a.rotateBitesLeft(1);
-            b = b.shiftRight();
         }
 
-        if(flags.isCarry()) result = decrement(result);
+        return alignRight(quotient,maxBits);
+    }
+
+    public static PureByte restOfDivide(PureByte x, PureByte y, PureFlags flags) {
+        if (flags == null) flags = new PureFlags();
+
+        PureByte a = x.copy();
+        PureByte b = y.copy();
+
+        //Prepare
+        int maxBits = Math.max(a.getLength(), b.getLength());
+
+        PureByte quotient = new PureByte(maxBits);
+        PureByte partial = new PureByte(maxBits);
+        PureByte dividend = alignLeft(a, maxBits);
+        PureByte divisor = alignLeft(b, maxBits);
+
+        for (int leftmostIndex = 0; leftmostIndex < maxBits; leftmostIndex++) {
+            boolean dividendBit = dividend.getBit(leftmostIndex).getValue();
+            boolean divisorBit = divisor.getBit(leftmostIndex).getValue();
+
+            partial = partial.shiftLeft();
+            if (dividendBit) partial = increment(partial);
+
+            boolean bitToSetInQuotient = partial.greaterOrEqualsThan(divisor);
+            quotient.setBit(leftmostIndex, bitToSetInQuotient);
+            if (bitToSetInQuotient) {
+                partial = subtract(partial, divisor);
+            }
+
+        }
+
+        return alignRight(partial, maxBits);
+    }
+
+    public static PureByte alignRight(PureByte byteToAlign, int bitsSize) {
+        PureByte result = new PureByte(bitsSize);
+        int leftmostBitOffset = 0;
+        for (int resultIndex = result.getLength() - 1; resultIndex >= 0 && leftmostBitOffset < byteToAlign.getLength(); resultIndex--) {
+            boolean bitToAlign = byteToAlign.getBit(byteToAlign.getLength() - 1 - leftmostBitOffset++).getValue();
+            result.setBit(resultIndex, bitToAlign);
+        }
+
         return result;
     }
 
-    static public PureByte multiply2(PureByte x, PureByte y, PureFlags flags) {
-        int computeLenght = x.getLength() > y.getLength() ? x.getLength() : y.getLength();
-        computeLenght *= 2;
+    public static PureByte alignLeft(PureByte byteToAlign, int bitsSize) {
+        PureByte result = new PureByte(bitsSize);
+        int leftmostBitOffset = 0;
+        for (int resultIndex = 0; resultIndex < bitsSize && leftmostBitOffset < byteToAlign.getLength(); resultIndex++) {
+            boolean bitToAlign = byteToAlign.getBit(leftmostBitOffset++).getValue();
+            result.setBit(resultIndex, bitToAlign);
+        }
 
-        if(flags == null) flags = new PureFlags();
-        PureByte one = new PureByte(x.getLength());
+        return result;
+    }
+
+    static public PureByte multiply(PureByte left, PureByte right, PureFlags flags) {
+        int maxBits = Math.max(left.getLength(), right.getLength());
+        int computeLength = maxBits * 2;
+
+        if (flags == null) flags = new PureFlags();
+        PureByte one = new PureByte(left.getLength());
         one = increment(one);
 
 
-        PureByte a = new PureByte(computeLenght, x);
-        PureByte b = y.copy();
-        PureByte result = new PureByte(computeLenght);
+        PureByte a = new PureByte(computeLength, left);
+        PureByte b = right.copy();
+        PureByte score = new PureByte(computeLength);
         while (!b.isZero()) {
-            if(!b.and(one).isZero()){
-                result = add(result, a, flags);
+            if (!b.and(one).isZero()) {
+                score = add(score, a, flags);
             }
 
 
-            a.rotateBitesLeft(1);
+            a = a.rotateBitesLeft(1);
             b = b.shiftRight();
         }
 
-        if(flags.isCarry()) result = decrement(result);
+        PureByte result = alignRight(score, maxBits);
+        if(score.greaterThan(alignRight(result, computeLength))) flags.setCarry(true);
         return result;
     }
 
@@ -181,4 +247,6 @@ public class U2BitsMathHelper {
 
         System.out.println(result);
     }
+
+
 }

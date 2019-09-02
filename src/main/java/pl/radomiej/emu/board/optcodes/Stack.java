@@ -12,6 +12,6 @@ public class Stack implements Optcode<PureCPU> {
     @Override
     public void execute(PureCPU pureCPU) {
         PureByte value = pureCPU.getMemory().getByIndex(0);
-        pureCPU.getMemory().getByIndex(1).setBites(value);
+        pureCPU.getMemory().setByIndex(1, value);
     }
 }

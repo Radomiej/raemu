@@ -14,6 +14,6 @@ public class LoadDirect implements Optcode<PureCPU> {
 
     @Override
     public void execute(PureCPU pureCPU) {
-        pureCPU.getMemory().getByIndex(0).setBites(value);
+        pureCPU.getMemory().setByIndex(0, value);
     }
 }
