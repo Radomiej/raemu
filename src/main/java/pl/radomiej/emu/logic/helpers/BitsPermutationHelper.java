@@ -1,6 +1,6 @@
 package pl.radomiej.emu.logic.helpers;
 
-import pl.radomiej.emu.logic.PureBit;
+import pl.radomiej.emu.logic.pure.PureBit;
 
 public class BitsPermutationHelper {
     public static PureBit[] circularShiftSingle(PureBit[] array, int shift, boolean right) {
