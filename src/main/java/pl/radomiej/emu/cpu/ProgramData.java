@@ -1,4 +1,4 @@
-package pl.radomiej.emu.integrations;
+package pl.radomiej.emu.cpu;
 
 import pl.radomiej.emu.logic.Optcode;
 
@@ -41,5 +41,9 @@ public class ProgramData<T> {
             System.err.println("No section: " + sectionName + " in program data");
         }
         current = codeSection.get(sectionName);
+    }
+
+    public void jump(int jumpIndex) {
+        current = jumpIndex;
     }
 }

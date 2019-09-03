@@ -1,7 +1,5 @@
-package pl.radomiej.emu.board;
+package pl.radomiej.emu.cpu;
 
-import pl.radomiej.emu.integrations.CPU;
-import pl.radomiej.emu.integrations.ProgramData;
 import pl.radomiej.emu.logic.Optcode;
 import pl.radomiej.emu.logic.pure.PureFlags;
 import pl.radomiej.emu.logic.pure.PureMemoryBank;

@@ -1,10 +1,10 @@
 package pl.radomiej.emu;
 
 import org.junit.Test;
-import pl.radomiej.emu.board.PureCPU;
-import pl.radomiej.emu.board.optcodes.LoadDirect;
-import pl.radomiej.emu.board.optcodes.LoadMemory;
-import pl.radomiej.emu.integrations.ProgramData;
+import pl.radomiej.emu.cpu.PureCPU;
+import pl.radomiej.emu.cpu.optcodes.LoadDirect;
+import pl.radomiej.emu.cpu.optcodes.LoadMemory;
+import pl.radomiej.emu.cpu.ProgramData;
 
 public class PureAssemblyTest {
 

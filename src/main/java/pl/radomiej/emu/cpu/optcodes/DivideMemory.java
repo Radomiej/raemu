@@ -1,6 +1,6 @@
-package pl.radomiej.emu.board.optcodes;
+package pl.radomiej.emu.cpu.optcodes;
 
-import pl.radomiej.emu.board.PureCPU;
+import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.Optcode;
 import pl.radomiej.emu.logic.helpers.U2BitsMathHelper;
 import pl.radomiej.emu.logic.pure.PureByte;
@@ -25,8 +25,5 @@ public class DivideMemory implements Optcode<PureCPU> {
 
         PureByte result = U2BitsMathHelper.divide(rA, rB, pureCPU.getFlags());
         memoryBank.setByIndex(c, result);
-
-
-
     }
 }

@@ -13,7 +13,7 @@ public class U2BitsMathHelper {
         PureByte result = new PureByte(maxBits);
         boolean carry = false;
 
-        // Add all bits one by one
+        // AddMemory all bits one by one
         for (int i = left.getLength() - 1; i >= 0; i--) {
             boolean firstBit = left.getBit(i).getValue();
             boolean secondBit = right.getBit(i).getValue();
@@ -74,7 +74,7 @@ public class U2BitsMathHelper {
         return result;
     }
 
-    //TODO Add support for flags
+    //TODO AddMemory support for flags
     static public PureByte divide(PureByte x, PureByte y, PureFlags flags) {
         if (flags == null) flags = new PureFlags();
 

@@ -1,4 +1,4 @@
-package pl.radomiej.emu.integrations;
+package pl.radomiej.emu.cpu;
 
 import pl.radomiej.emu.logic.pure.PureFlags;
 

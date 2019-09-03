@@ -1,6 +1,6 @@
-package pl.radomiej.emu.board.optcodes;
+package pl.radomiej.emu.cpu.optcodes;
 
-import pl.radomiej.emu.board.PureCPU;
+import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.Optcode;
 import pl.radomiej.emu.logic.pure.PureByte;
 import pl.radomiej.emu.logic.helpers.ToByteParser;
