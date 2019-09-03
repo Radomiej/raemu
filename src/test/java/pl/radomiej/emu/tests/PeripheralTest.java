@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PeripheralTest {
 
     @Test
-    public void ConsoleMemoryCellLogger_Test() {
+    public void consoleMemoryCellLogger_Test() {
         PureCPU myCPU = new PureCPU(IncrementAsmExample.builder().build().createProgramData());
         ConsoleMemoryCellLoggerDevice to = new ConsoleMemoryCellLoggerDevice(myCPU, 0);
         to.turnOn();
@@ -26,7 +26,7 @@ public class PeripheralTest {
     }
 
     @Test
-    public void MemoryCellChangeValueListener_Test() {
+    public void memoryCellChangeValueListener_Test() {
         PureCPU myCPU = new PureCPU(IncrementAsmExample.builder().build().createProgramData());
 
         final List<PureByte> listeningValues = new ArrayList<>(100);
