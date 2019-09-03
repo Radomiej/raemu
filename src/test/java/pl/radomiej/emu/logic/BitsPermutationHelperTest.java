@@ -1,12 +1,13 @@
 package pl.radomiej.emu.logic;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import pl.radomiej.emu.logic.helpers.BitsPermutationHelper;
 import pl.radomiej.emu.logic.helpers.ToByteParser;
 import pl.radomiej.emu.logic.pure.PureBit;
 import pl.radomiej.emu.logic.pure.PureByte;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class BitsPermutationHelperTest {
     @Test

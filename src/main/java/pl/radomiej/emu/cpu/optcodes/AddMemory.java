@@ -4,7 +4,7 @@ import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.Optcode;
 import pl.radomiej.emu.logic.helpers.U2BitsMathHelper;
 import pl.radomiej.emu.logic.pure.PureByte;
-import pl.radomiej.emu.logic.pure.PureMemoryBank;
+import pl.radomiej.emu.cpu.PureMemoryBank;
 
 public class AddMemory implements Optcode<PureCPU> {
     final private int a;

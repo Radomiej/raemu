@@ -2,7 +2,6 @@ package pl.radomiej.emu.cpu;
 
 import pl.radomiej.emu.logic.Optcode;
 import pl.radomiej.emu.logic.pure.PureFlags;
-import pl.radomiej.emu.logic.pure.PureMemoryBank;
 
 public class PureCPU implements CPU {
     private PureMemoryBank memory;

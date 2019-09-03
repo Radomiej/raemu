@@ -194,7 +194,7 @@ public class U2BitsMathHelper {
         return subtract(value, one);
     }
 
-    private static PureByte increment(PureByte value) {
+    public static PureByte increment(PureByte value) {
         PureByte one = new PureByte(value.getLength());
         one.setBit(value.getLength() - 1, true);
         return add(value, one);

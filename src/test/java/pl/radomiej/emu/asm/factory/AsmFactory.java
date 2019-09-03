@@ -1,4 +1,4 @@
-package pl.radomiej.emu.asm;
+package pl.radomiej.emu.asm.factory;
 
 import pl.radomiej.emu.cpu.ProgramData;
 

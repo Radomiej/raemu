@@ -1,5 +1,9 @@
 package pl.radomiej.emu.cpu;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import pl.radomiej.emu.logic.Optcode;
 
 import java.util.ArrayList;
@@ -7,8 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProgramData<T> {
     private List<Optcode<T>> optcodes = new ArrayList<Optcode<T>>(1000);
+    @Getter
     private int current = 0;
     private Map<String, Integer> codeSection = new HashMap<>(1000);
 
@@ -17,7 +25,7 @@ public class ProgramData<T> {
             System.err.print("ERR: No CPU code");
             return null;
         }
-        if(optcodes.size() >= current){
+        if(current >= optcodes.size()){
             System.err.print("ERR: Program end overflow");
             return null;
         }
@@ -45,5 +53,12 @@ public class ProgramData<T> {
 
     public void jump(int jumpIndex) {
         current = jumpIndex;
+    }
+
+    @Override
+    public String toString() {
+        return "ProgramData{" +
+                "current=" + current +
+                '}';
     }
 }
