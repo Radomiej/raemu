@@ -1,6 +1,7 @@
 package pl.radomiej.emu.asm.factory;
 
 import lombok.Builder;
+import pl.radomiej.emu.asm.factory.AsmFactory;
 import pl.radomiej.emu.cpu.ProgramData;
 import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.cpu.optcodes.Idle;
