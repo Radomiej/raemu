@@ -21,6 +21,6 @@ public class SaveDirect implements Optcode<PureCPU> {
 
     @Override
     public void execute(PureCPU pureCPU) {
-        pureCPU.getMemory().setByIndex(0, value);
+        pureCPU.getMemory().setByIndex(to, value);
     }
 }

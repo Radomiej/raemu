@@ -4,7 +4,7 @@ import lombok.Builder;
 import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.pure.PureByte;
 
-public class ConsoleMemoryCellLoggerDevice implements PeripheralDevice{
+public class ConsoleMemoryCellLoggerDevice extends PeripheralDeviceDefault{
     private PureCPU cpu;
     private int observeMemoryCellIndex;
 

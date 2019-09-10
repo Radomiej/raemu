@@ -14,11 +14,14 @@ public class PureMemoryBank {
     private HashMap<String, Integer> names = new HashMap<String, Integer>();
     private HashMap<Integer, Integer> cpuAddresses = new HashMap<Integer, Integer>();
 
-
     public PureMemoryBank(int cells) {
+        this(cells, 8);
+    }
+
+    public PureMemoryBank(int cells, int architectureBits) {
         memory = new PureByte[cells];
         for (int i = 0; i < cells; i++) {
-            memory[i] = new PureByte();
+            memory[i] = new PureByte(architectureBits);
         }
 
         cellChangeListeners = new ArrayList[cells];

@@ -10,7 +10,7 @@ public class PureCPU implements CPU {
 
     public PureCPU(ProgramData<PureCPU> program) {
         this.program = program;
-        memory = new PureMemoryBank(64);
+        memory = new PureMemoryBank(64 * 64, 64);
         flags = new PureFlags();
     }
 

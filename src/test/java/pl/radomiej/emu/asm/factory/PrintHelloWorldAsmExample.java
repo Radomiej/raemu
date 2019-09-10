@@ -1,6 +1,8 @@
 package pl.radomiej.emu.asm.factory;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import pl.radomiej.emu.cpu.ProgramData;
 import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.cpu.optcodes.Idle;
@@ -9,23 +11,27 @@ import pl.radomiej.emu.cpu.optcodes.JumpTag;
 import pl.radomiej.emu.cpu.optcodes.SaveDirect;
 
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PrintHelloWorldAsmExample implements AsmFactory<PureCPU> {
+    private int writeMemoryCellIndex = 0;
+
     @Override
     public ProgramData<PureCPU> createProgramData() {
         ProgramData<PureCPU> program = new ProgramData<PureCPU>();
-        program.add(new SaveDirect(0, 72));
-        program.add(new SaveDirect(0, 101));
-        program.add(new SaveDirect(0, 108));
-        program.add(new SaveDirect(0, 108));
-        program.add(new SaveDirect(0, 111));
-        program.add(new SaveDirect(0, 32));
-        program.add(new SaveDirect(0, 87));
-        program.add(new SaveDirect(0, 111));
-        program.add(new SaveDirect(0, 114));
-        program.add(new SaveDirect(0, 108));
-        program.add(new SaveDirect(0, 100));
-        program.add(new SaveDirect(0, 33));
-        program.add(new SaveDirect(0, 3));
+        program.add(new SaveDirect(writeMemoryCellIndex, 72));
+        program.add(new SaveDirect(writeMemoryCellIndex, 101));
+        program.add(new SaveDirect(writeMemoryCellIndex, 108));
+        program.add(new SaveDirect(writeMemoryCellIndex, 108));
+        program.add(new SaveDirect(writeMemoryCellIndex, 111));
+        program.add(new SaveDirect(writeMemoryCellIndex, 32));
+        program.add(new SaveDirect(writeMemoryCellIndex, 87));
+        program.add(new SaveDirect(writeMemoryCellIndex, 111));
+        program.add(new SaveDirect(writeMemoryCellIndex, 114));
+        program.add(new SaveDirect(writeMemoryCellIndex, 108));
+        program.add(new SaveDirect(writeMemoryCellIndex, 100));
+        program.add(new SaveDirect(writeMemoryCellIndex, 33));
+        program.add(new SaveDirect(writeMemoryCellIndex, 3));
 
         program.add(new Idle(), "idle");
         program.add(new JumpTag("idle"));

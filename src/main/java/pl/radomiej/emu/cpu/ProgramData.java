@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pl.radomiej.emu.logic.Optcode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Builder
 @NoArgsConstructor
@@ -19,6 +16,7 @@ public class ProgramData<T> {
     @Getter
     private int current = 0;
     private Map<String, Integer> codeSection = new HashMap<>(1000);
+    private LinkedList<Integer> programJumpStack = new LinkedList<>();
 
     public Optcode<T> getNext() {
         if(optcodes.size() == 0) {
@@ -44,11 +42,23 @@ public class ProgramData<T> {
         optcodes.add(optcode);
     }
 
-    public void goTo(String sectionName){
+    public int goTo(String sectionName){
         if(!codeSection.containsKey(sectionName)){
             System.err.println("No section: " + sectionName + " in program data");
         }
+        int oldIndex = current;
+        programJumpStack.add(oldIndex);
         current = codeSection.get(sectionName);
+        return oldIndex;
+    }
+
+    /**
+     * @return Index of renewed instruction occur.
+     */
+    public int returnToUpIndex(){
+        int oldIndex = current;
+        current = programJumpStack.removeLast();
+        return oldIndex;
     }
 
     public void jump(int jumpIndex) {
@@ -60,5 +70,9 @@ public class ProgramData<T> {
         return "ProgramData{" +
                 "current=" + current +
                 '}';
+    }
+
+    public boolean isTagExist(String jumpInstructionTag) {
+        return codeSection.containsKey(jumpInstructionTag);
     }
 }

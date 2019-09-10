@@ -3,12 +3,12 @@ package pl.radomiej.emu.peripheral;
 import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.pure.PureByte;
 
-public class InterruptingUnit implements PeripheralDevice{
+public class ChangeRegistryInterruptingUnit extends PeripheralDeviceDefault{
     private PureCPU cpu;
     private int observeMemoryCellIndex;
     private String jumpInstructionTag;
 
-    public InterruptingUnit(PureCPU cpu, int observeMemoryCellIndex, String jumpInstructionTag){
+    public ChangeRegistryInterruptingUnit(PureCPU cpu, int observeMemoryCellIndex, String jumpInstructionTag){
         this.cpu = cpu;
         this.observeMemoryCellIndex = observeMemoryCellIndex;
         this.jumpInstructionTag = jumpInstructionTag;
