@@ -9,7 +9,7 @@ import pl.radomiej.emu.logic.pure.PureFlags;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class U2PureByteTest {
+public class U2UnsignedPureByteTest {
 
     @Test
     public void byteParserTest() {
