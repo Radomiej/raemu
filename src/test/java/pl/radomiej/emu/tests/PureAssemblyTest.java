@@ -4,11 +4,7 @@ import org.junit.jupiter.api.Test;
 import pl.radomiej.emu.asm.factory.IdleAsmExample;
 import pl.radomiej.emu.asm.factory.IncrementAsmExample;
 import pl.radomiej.emu.cpu.PureCPU;
-import pl.radomiej.emu.cpu.optcodes.LoadDirect;
-import pl.radomiej.emu.cpu.optcodes.LoadMemory;
-import pl.radomiej.emu.cpu.ProgramData;
 import pl.radomiej.emu.logic.helpers.ToByteParser;
-import pl.radomiej.emu.logic.pure.PureBit;
 import pl.radomiej.emu.logic.pure.PureByte;
 
 import java.util.ArrayList;

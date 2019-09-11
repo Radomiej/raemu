@@ -2,7 +2,7 @@ package pl.radomiej.emu.logic;
 
 import org.junit.jupiter.api.Test;
 import pl.radomiej.emu.logic.helpers.ToByteParser;
-import pl.radomiej.emu.logic.helpers.U2BitsMathHelper;
+import pl.radomiej.emu.logic.helpers.U2UnsignedBitsMathHelper;
 import pl.radomiej.emu.logic.pure.PureByte;
 import pl.radomiej.emu.logic.pure.PureFlags;
 
@@ -114,13 +114,13 @@ public class U2PureByteTest {
     public void addUnsignedBytesTest() {
         PureByte left = ToByteParser.parse("01100011");
         PureByte right = ToByteParser.parse("00000010");
-        PureByte result = U2BitsMathHelper.add(left, right);
+        PureByte result = U2UnsignedBitsMathHelper.add(left, right);
         assertEquals("01100101", result.toBinaryString());
 
         PureFlags flag = new PureFlags();
         left = ToByteParser.parse("11111110");
         right = ToByteParser.parse("00000010");
-        result = U2BitsMathHelper.add(left, right, flag);
+        result = U2UnsignedBitsMathHelper.add(left, right, flag);
         assertEquals("00000000", result.toBinaryString());
         assertEquals(true, flag.isCarry());
 
@@ -135,7 +135,7 @@ public class U2PureByteTest {
                 PureByte byteY = ToByteParser.parse(y);
                 PureFlags flags = new PureFlags();
 
-                PureByte addResult = U2BitsMathHelper.add(byteX, byteY, flags);
+                PureByte addResult = U2UnsignedBitsMathHelper.add(byteX, byteY, flags);
 
                 boolean carryFlagShouldBe = x + y > 255 ? true : false;
 
@@ -149,7 +149,7 @@ public class U2PureByteTest {
     public void addBytesOverflowTest() {
         PureByte left = ToByteParser.parse("11111111");
         PureByte right = ToByteParser.parse("00000010");
-        PureByte result = U2BitsMathHelper.add(left, right);
+        PureByte result = U2UnsignedBitsMathHelper.add(left, right);
         assertEquals("00000001", result.toBinaryString());
     }
 
@@ -157,14 +157,14 @@ public class U2PureByteTest {
     public void subtractUnsignedBytes() {
         PureByte left = ToByteParser.parse("00000101");
         PureByte right = ToByteParser.parse("00000011");
-        PureByte result = U2BitsMathHelper.subtract(left, right);
+        PureByte result = U2UnsignedBitsMathHelper.subtract(left, right);
         assertEquals("00000010", result.toBinaryString());
 
         for (int x = 0; x <= 255; x++) {
             for (int y = 0; y <= 255; y++) {
                 PureByte byteX = ToByteParser.parse(x);
                 PureByte byteY = ToByteParser.parse(y);
-                PureByte subtractResult = U2BitsMathHelper.subtract(byteX, byteY);
+                PureByte subtractResult = U2UnsignedBitsMathHelper.subtract(byteX, byteY);
                 assertEquals(ToByteParser.parse(x - y).toUnsignedInteger(), subtractResult.toUnsignedInteger());
             }
         }
@@ -174,14 +174,14 @@ public class U2PureByteTest {
     public void subtractVersion2UnsignedBytesTest() {
         PureByte left = ToByteParser.parse("00000101");
         PureByte right = ToByteParser.parse("00000011");
-        PureByte result = U2BitsMathHelper.subtract2(left, right);
+        PureByte result = U2UnsignedBitsMathHelper.subtract2(left, right);
         assertEquals("00000010", result.toBinaryString());
 
         for (int x = 0; x <= 255; x++) {
             for (int y = 0; y <= 255; y++) {
                 PureByte byteX = ToByteParser.parse(x);
                 PureByte byteY = ToByteParser.parse(y);
-                PureByte subtractResult = U2BitsMathHelper.subtract2(byteX, byteY);
+                PureByte subtractResult = U2UnsignedBitsMathHelper.subtract2(byteX, byteY);
                 assertEquals(ToByteParser.parse(x - y).toUnsignedInteger(), subtractResult.toUnsignedInteger());
             }
         }
@@ -294,7 +294,7 @@ public class U2PureByteTest {
                 if(x == 2 && y == 128){
                     System.out.println("DeBUG");
                 }
-                PureByte result = U2BitsMathHelper.multiply(byteX, byteY, flag);
+                PureByte result = U2UnsignedBitsMathHelper.multiply(byteX, byteY, flag);
                 System.out.println(x + " * " + y + " = " + result.toString());
 
                 int testResult = x * y;
@@ -317,7 +317,7 @@ public class U2PureByteTest {
                 PureFlags flag = new PureFlags();
                 PureByte byteX = ToByteParser.parse(x);
                 PureByte byteY = ToByteParser.parse(y);
-                PureByte result = U2BitsMathHelper.divide(byteX, byteY, flag);
+                PureByte result = U2UnsignedBitsMathHelper.divide(byteX, byteY, flag);
                 System.out.println(x + " / " + y + " = " + result.toString());
 
                 int testResult = x / y;
@@ -333,7 +333,7 @@ public class U2PureByteTest {
                 PureFlags flag = new PureFlags();
                 PureByte byteX = ToByteParser.parse(x);
                 PureByte byteY = ToByteParser.parse(y);
-                PureByte result = U2BitsMathHelper.restOfDivide(byteX, byteY, flag);
+                PureByte result = U2UnsignedBitsMathHelper.restOfDivide(byteX, byteY, flag);
                 System.out.println(x + " % " + y + " = " + result.toString());
 
                 int testResult = x % y;
@@ -346,21 +346,21 @@ public class U2PureByteTest {
     public void alignToLeftTest1() {
         String fillZeros = new String(new char[24]).replace('\0', '0');
         PureByte testByte = ToByteParser.parse("01100011");
-        PureByte result = U2BitsMathHelper.alignLeft(testByte, 32);
+        PureByte result = U2UnsignedBitsMathHelper.alignLeft(testByte, 32);
         assertEquals("01100011" + fillZeros, result.toBinaryString());
     }
 
     @Test
     public void alignToLeft_WithCutTheOverflowBits_Test() {
         PureByte testByte = ToByteParser.parse("01100011");
-        PureByte result = U2BitsMathHelper.alignLeft(testByte, 4);
+        PureByte result = U2UnsignedBitsMathHelper.alignLeft(testByte, 4);
         assertEquals("0110", result.toBinaryString());
     }
 
     @Test
     public void alignToLeft_WithTheSameBitsLength_Test() {
         PureByte testByte = ToByteParser.parse("01100011");
-        PureByte result = U2BitsMathHelper.alignLeft(testByte, 8);
+        PureByte result = U2UnsignedBitsMathHelper.alignLeft(testByte, 8);
         assertEquals("01100011", result.toBinaryString());
     }
 
@@ -368,21 +368,21 @@ public class U2PureByteTest {
     public void alignToRightTest1() {
         String fillZeros = new String(new char[24]).replace('\0', '0');
         PureByte testByte = ToByteParser.parse("01100011");
-        PureByte result = U2BitsMathHelper.alignRight(testByte, 32);
+        PureByte result = U2UnsignedBitsMathHelper.alignRight(testByte, 32);
         assertEquals(fillZeros + "01100011", result.toBinaryString());
     }
 
     @Test
     public void alignToRight_WithCutTheOverflowBits_Test() {
         PureByte testByte = ToByteParser.parse("01100011");
-        PureByte result = U2BitsMathHelper.alignRight(testByte, 4);
+        PureByte result = U2UnsignedBitsMathHelper.alignRight(testByte, 4);
         assertEquals("0011", result.toBinaryString());
     }
 
     @Test
     public void alignToRight_WithTheSameBitsLength_Test() {
         PureByte testByte = ToByteParser.parse("01100011");
-        PureByte result = U2BitsMathHelper.alignRight(testByte, 8);
+        PureByte result = U2UnsignedBitsMathHelper.alignRight(testByte, 8);
         assertEquals("01100011", result.toBinaryString());
     }
 }

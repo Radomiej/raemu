@@ -3,7 +3,7 @@ package pl.radomiej.emu.logic.helpers;
 import pl.radomiej.emu.logic.pure.PureByte;
 import pl.radomiej.emu.logic.pure.PureFlags;
 
-public class U2BitsMathHelper {
+public class U2UnsignedBitsMathHelper {
     public static PureByte add(PureByte left, PureByte right) {
         return add(left, right, null);
     }
@@ -35,7 +35,6 @@ public class U2BitsMathHelper {
         // if overflow, then add a leading 1
         if (flags != null) {
             flags.setCarry(carry);
-            System.out.println("carry: " + carry);
         }
 
 

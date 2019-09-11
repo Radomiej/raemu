@@ -1,13 +1,11 @@
 package pl.radomiej.emu.asm.factory;
 
 import lombok.Builder;
-import pl.radomiej.emu.asm.factory.AsmFactory;
 import pl.radomiej.emu.cpu.ProgramData;
 import pl.radomiej.emu.cpu.PureCPU;
-import pl.radomiej.emu.cpu.optcodes.Idle;
-import pl.radomiej.emu.cpu.optcodes.IncrementMemory;
-import pl.radomiej.emu.cpu.optcodes.JumpTag;
-import pl.radomiej.emu.cpu.optcodes.SaveDirect;
+import pl.radomiej.emu.cpu.optcodes.alu.IncrementMemory;
+import pl.radomiej.emu.cpu.optcodes.program.JumpTag;
+import pl.radomiej.emu.cpu.optcodes.memory.SaveDirect;
 
 @Builder
 public class IncrementAsmExample implements AsmFactory<PureCPU> {

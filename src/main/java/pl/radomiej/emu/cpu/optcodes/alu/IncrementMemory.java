@@ -1,8 +1,8 @@
-package pl.radomiej.emu.cpu.optcodes;
+package pl.radomiej.emu.cpu.optcodes.alu;
 
 import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.Optcode;
-import pl.radomiej.emu.logic.helpers.U2BitsMathHelper;
+import pl.radomiej.emu.logic.helpers.U2UnsignedBitsMathHelper;
 import pl.radomiej.emu.logic.pure.PureByte;
 import pl.radomiej.emu.cpu.PureMemoryBank;
 
@@ -18,7 +18,7 @@ public class IncrementMemory implements Optcode<PureCPU> {
         PureMemoryBank memoryBank = pureCPU.getMemory();
         PureByte rA = memoryBank.getByIndex(a);
 
-        PureByte result = U2BitsMathHelper.increment(rA);
+        PureByte result = U2UnsignedBitsMathHelper.increment(rA);
         memoryBank.setByIndex(a, result);
     }
 }

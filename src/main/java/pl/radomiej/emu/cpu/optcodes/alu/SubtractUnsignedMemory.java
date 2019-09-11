@@ -1,17 +1,17 @@
-package pl.radomiej.emu.cpu.optcodes;
+package pl.radomiej.emu.cpu.optcodes.alu;
 
 import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.Optcode;
-import pl.radomiej.emu.logic.helpers.U2BitsMathHelper;
+import pl.radomiej.emu.logic.helpers.U2UnsignedBitsMathHelper;
 import pl.radomiej.emu.logic.pure.PureByte;
 import pl.radomiej.emu.cpu.PureMemoryBank;
 
-public class MultiplyMemory implements Optcode<PureCPU> {
+public class SubtractUnsignedMemory implements Optcode<PureCPU> {
     final private int a;
     final private int b;
     final private int c;
 
-    public MultiplyMemory(int a, int b, int c) {
+    public SubtractUnsignedMemory(int a, int b, int c) {
         this.a = a;
         this.b = b;
         this.c = c;
@@ -23,7 +23,7 @@ public class MultiplyMemory implements Optcode<PureCPU> {
         PureByte rA = memoryBank.getByIndex(a);
         PureByte rB = memoryBank.getByIndex(b);
 
-        PureByte result = U2BitsMathHelper.multiply(rA, rB, pureCPU.getFlags());
+        PureByte result = U2UnsignedBitsMathHelper.subtract(rA, rB, pureCPU.getFlags());
         memoryBank.setByIndex(c, result);
     }
 }

@@ -1,4 +1,4 @@
-package pl.radomiej.emu.cpu.optcodes;
+package pl.radomiej.emu.cpu.optcodes.memory;
 
 import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.Optcode;
