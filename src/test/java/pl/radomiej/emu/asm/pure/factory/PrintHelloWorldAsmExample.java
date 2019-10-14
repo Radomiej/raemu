@@ -1,4 +1,4 @@
-package pl.radomiej.emu.asm.factory;
+package pl.radomiej.emu.asm.pure.factory;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

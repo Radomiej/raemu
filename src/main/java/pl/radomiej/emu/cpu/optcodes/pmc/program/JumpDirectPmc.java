@@ -1,11 +1,12 @@
 package pl.radomiej.emu.cpu.optcodes.pmc.program;
 
+import pl.radomiej.emu.cpu.PmcCPU;
 import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.cpu.PureMemoryBank;
 import pl.radomiej.emu.logic.Optcode;
 import pl.radomiej.emu.logic.pure.PureByte;
 
-public class JumpDirectPmc implements Optcode<PureCPU> {
+public class JumpDirectPmc implements Optcode<PmcCPU> {
     private int jumpCellIndex;
 
     public JumpDirectPmc(int jumpCellIndex){
@@ -13,7 +14,7 @@ public class JumpDirectPmc implements Optcode<PureCPU> {
     }
 
     @Override
-    public void execute(PureCPU pmcCPU) {
+    public void execute(PmcCPU pmcCPU) {
         PureMemoryBank memory = pmcCPU.getMemory();
         PureByte instructionAddress = memory.getByIndex(jumpCellIndex);
         pmcCPU.getMemory().setByIndex(pmcCPU.getPcRegistry(), instructionAddress);

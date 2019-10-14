@@ -1,11 +1,12 @@
 package pl.radomiej.emu.cpu.optcodes.pmc.memory;
 
+import pl.radomiej.emu.cpu.PmcCPU;
 import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.Optcode;
 import pl.radomiej.emu.logic.helpers.ToByteParser;
 import pl.radomiej.emu.logic.pure.PureByte;
 
-public class SaveDirectPmc implements Optcode<PureCPU> {
+public class SaveDirectPmc implements Optcode<PmcCPU> {
     private final PureByte value;
     private final int to;
 
@@ -20,7 +21,7 @@ public class SaveDirectPmc implements Optcode<PureCPU> {
     }
 
     @Override
-    public void execute(PureCPU pureCPU) {
+    public void execute(PmcCPU pureCPU) {
         pureCPU.getMemory().setByIndex(to, value);
     }
 }

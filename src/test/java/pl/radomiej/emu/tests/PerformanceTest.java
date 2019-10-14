@@ -1,7 +1,7 @@
 package pl.radomiej.emu.tests;
 
 import org.junit.jupiter.api.Test;
-import pl.radomiej.emu.asm.factory.IncrementAsmExample;
+import pl.radomiej.emu.asm.pure.factory.IncrementAsmExample;
 import pl.radomiej.emu.cpu.PureCPU;
 
 public class PerformanceTest {

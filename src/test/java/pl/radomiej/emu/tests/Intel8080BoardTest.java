@@ -1,12 +1,12 @@
 package pl.radomiej.emu.tests;
 
 import org.junit.jupiter.api.Test;
-import pl.radomiej.emu.asm.factory.IncrementAsmExample;
-import pl.radomiej.emu.asm.factory.PrintHelloWorldAsmExample;
+import pl.radomiej.emu.asm.pure.factory.IncrementAsmExample;
+import pl.radomiej.emu.asm.pure.factory.PrintHelloWorldAsmExample;
 import pl.radomiej.emu.board.RaBoard;
 import pl.radomiej.emu.cpu.PureCPU;
 
-public class PmcBoardTest {
+public class Intel8080BoardTest {
 
     @Test
     public void bootloaderTest() {
