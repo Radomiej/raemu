@@ -1,8 +1,7 @@
-package pl.radomiej.emu.cpu.optcodes.program;
+package pl.radomiej.emu.cpu.optcodes.pure.program;
 
 import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.Optcode;
-import pl.radomiej.emu.logic.pure.PureByte;
 
 public class Idle implements Optcode<PureCPU> {
     public Idle() {

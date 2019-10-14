@@ -1,4 +1,4 @@
-package pl.radomiej.emu.cpu.optcodes.program;
+package pl.radomiej.emu.cpu.optcodes.pure.program;
 
 import lombok.SneakyThrows;
 import pl.radomiej.emu.cpu.PureCPU;

@@ -1,14 +1,14 @@
-package pl.radomiej.emu.cpu.optcodes.memory;
+package pl.radomiej.emu.cpu.optcodes.pmc.memory;
 
 import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.Optcode;
-import pl.radomiej.emu.logic.pure.PureByte;
 import pl.radomiej.emu.logic.helpers.ToByteParser;
+import pl.radomiej.emu.logic.pure.PureByte;
 
-public class LoadDirect implements Optcode<PureCPU> {
+public class LoadDirectPmc implements Optcode<PureCPU> {
     final private PureByte value;
 
-    public LoadDirect(String textValue) {
+    public LoadDirectPmc(String textValue) {
         this.value = ToByteParser.parse(textValue);
     }
 

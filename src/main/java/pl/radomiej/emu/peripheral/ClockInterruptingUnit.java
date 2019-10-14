@@ -1,7 +1,6 @@
 package pl.radomiej.emu.peripheral;
 
 import pl.radomiej.emu.cpu.PureCPU;
-import pl.radomiej.emu.logic.pure.PureByte;
 
 public class ClockInterruptingUnit implements PeripheralDevice{
     private PureCPU cpu;

@@ -1,4 +1,4 @@
-package pl.radomiej.emu.cpu.optcodes.alu;
+package pl.radomiej.emu.cpu.optcodes.pmc.alu;
 
 import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.cpu.PureMemoryBank;
@@ -6,12 +6,12 @@ import pl.radomiej.emu.logic.Optcode;
 import pl.radomiej.emu.logic.helpers.U2UnsignedBitsMathHelper;
 import pl.radomiej.emu.logic.pure.PureByte;
 
-public class RestOfDivideUnsignedMemory implements Optcode<PureCPU> {
+public class AddUnsignedMemoryPmc implements Optcode<PureCPU> {
     final private int a;
     final private int b;
     final private int c;
 
-    public RestOfDivideUnsignedMemory(int a, int b, int c) {
+    public AddUnsignedMemoryPmc(int a, int b, int c) {
         this.a = a;
         this.b = b;
         this.c = c;
@@ -23,7 +23,7 @@ public class RestOfDivideUnsignedMemory implements Optcode<PureCPU> {
         PureByte rA = memoryBank.getByIndex(a);
         PureByte rB = memoryBank.getByIndex(b);
 
-        PureByte result = U2UnsignedBitsMathHelper.restOfDivide(rA, rB, pureCPU.getFlags());
+        PureByte result = U2UnsignedBitsMathHelper.add(rA, rB, pureCPU.getFlags());
         memoryBank.setByIndex(c, result);
     }
 }

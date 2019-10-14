@@ -3,7 +3,6 @@ package pl.radomiej.emu.board;
 import pl.radomiej.emu.asm.factory.IdleAsmExample;
 import pl.radomiej.emu.cpu.ProgramData;
 import pl.radomiej.emu.cpu.PureCPU;
-import pl.radomiej.emu.peripheral.ChangeRegistryInterruptingUnit;
 import pl.radomiej.emu.peripheral.ClockInterruptingUnit;
 import pl.radomiej.emu.peripheral.PeripheralDevice;
 import pl.radomiej.emu.peripheral.SPIAsciiOutputDevice;

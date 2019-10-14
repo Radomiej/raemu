@@ -1,6 +1,5 @@
 package pl.radomiej.emu.peripheral;
 
-import lombok.Builder;
 import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.pure.PureByte;
 
