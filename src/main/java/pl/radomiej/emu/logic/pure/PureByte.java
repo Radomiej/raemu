@@ -9,7 +9,10 @@ import java.util.Objects;
 public class PureByte implements RaByte {
 
     /**
-     *  [N+1][N][1][0]
+     * Little-endian
+     * [N][N-1][1][0]
+     * [0] - Index 0 - Biggest
+     * [N] - Index Last - Lowest
      */
     private final PureBit[] bites;
     private final boolean defaultValue;
@@ -50,13 +53,47 @@ public class PureByte implements RaByte {
         }
     }
 
+    public static PureByte adjust(PureByte toAdjust, PureByte reference) {
+        if (toAdjust.bites.length == reference.bites.length) return toAdjust;
+        int referenceLength = reference.bites.length;
+        int adjustLength = toAdjust.bites.length;
+
+        int delta = referenceLength - adjustLength;
+        boolean expand = referenceLength > adjustLength;
+
+        PureByte temp = new PureByte(reference.bites);
+        for (int i = 0; i < referenceLength; i++) {
+            if (expand) {
+                int referenceIndex = referenceLength - delta + i;
+                if (referenceIndex < 0 || referenceIndex >= referenceLength) continue;
+                temp.bites[referenceIndex] = toAdjust.bites[i];
+            } else {
+                int adjustIndex = -delta + i;
+                if (adjustIndex < 0 || adjustIndex >= adjustLength) continue;
+                temp.bites[i] = toAdjust.bites[adjustIndex];
+            }
+        }
+        return temp;
+    }
 
     //Multiple argument operations
+    public void shiftRightInternal(int iteration) {
+        for (int i = 0; i < iteration; i++) {
+            shiftRightInternal();
+        }
+    }
+
     public void shiftRightInternal() {
         for (int i = bites.length - 1; i > 0; i--) {
             bites[i] = bites[i - 1];
         }
         bites[0] = PureBit.getValueFor(defaultValue);
+    }
+
+    public void shiftLeftInternal(int iteration) {
+        for (int i = 0; i < iteration; i++) {
+            shiftLeftInternal();
+        }
     }
 
     public void shiftLeftInternal() {
@@ -134,7 +171,7 @@ public class PureByte implements RaByte {
 
     @Override
     public PureByte copy() {
-        PureByte result = new PureByte();
+        PureByte result = new PureByte(bites.length);
 
         for (int i = 0; i < bites.length; i++) {
             boolean copyBitValue = bites[i].getValue();
@@ -144,7 +181,7 @@ public class PureByte implements RaByte {
     }
 
     public PureByte negation() {
-        PureByte result = new PureByte();
+        PureByte result = new PureByte(bites.length);
 
         for (int i = 0; i < bites.length; i++) {
             boolean copyBitValue = !bites[i].getValue();
@@ -154,7 +191,8 @@ public class PureByte implements RaByte {
     }
 
     public PureByte and(PureByte other) {
-        PureByte result = new PureByte();
+        other = adjust(other, this);
+        PureByte result = new PureByte(bites.length);
 
         for (int i = 0; i < bites.length; i++) {
             boolean copyBitValue = bites[i].getValue() & other.getBit(i).getValue();
@@ -164,7 +202,8 @@ public class PureByte implements RaByte {
     }
 
     public PureByte or(PureByte other) {
-        PureByte result = new PureByte();
+        other = adjust(other, this);
+        PureByte result = new PureByte(bites.length);
 
         for (int i = 0; i < bites.length; i++) {
             boolean copyBitValue = bites[i].getValue() | other.getBit(i).getValue();
@@ -174,7 +213,8 @@ public class PureByte implements RaByte {
     }
 
     public PureByte xor(PureByte other) {
-        PureByte result = new PureByte();
+        other = adjust(other, this);
+        PureByte result = new PureByte(bites.length);
 
         for (int i = 0; i < bites.length; i++) {
             boolean copyBitValue = bites[i].getValue() != other.getBit(i).getValue();
@@ -189,6 +229,7 @@ public class PureByte implements RaByte {
         result.shiftLeftInternal();
         return result;
     }
+
 
     @Override
     public PureByte shiftRight() {
@@ -255,7 +296,8 @@ public class PureByte implements RaByte {
     }
 
     public boolean lessComplex(PureByte other, boolean checkEqual) {
-        if(other.getLength() != getLength()) throw new UnsupportedOperationException("Bytes to compare must have the same amount of bits!");
+        if (other.getLength() != getLength())
+            throw new UnsupportedOperationException("Bytes to compare must have the same amount of bits!");
         for (int i = 0; i < bites.length; i++) {
             if (other.getBit(i).getValue() && !bites[i].getValue()) return true;
             else if (!other.getBit(i).getValue() && bites[i].getValue()) return false;
@@ -264,11 +306,11 @@ public class PureByte implements RaByte {
         return checkEqual;
     }
 
-    public boolean getLeftmostBit(){
+    public boolean getLeftmostBit() {
         return bites[bites.length - 1].getValue();
     }
 
-    public boolean getRightmostBit(){
+    public boolean getRightmostBit() {
         return bites[0].getValue();
     }
 }

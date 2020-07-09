@@ -1,5 +1,6 @@
 package pl.radomiej.emu.logic.helpers;
 
+import pl.radomiej.emu.cpu.Flag;
 import pl.radomiej.emu.logic.pure.PureByte;
 import pl.radomiej.emu.logic.pure.PureFlags;
 
@@ -8,7 +9,7 @@ public class U2UnsignedBitsMathHelper {
         return add(left, right, null);
     }
 
-    public static PureByte add(PureByte left, PureByte right, PureFlags flags) {
+    public static PureByte add(PureByte left, PureByte right, Flag flags) {
         int maxBits = Math.max(left.getLength(), right.getLength());
         PureByte result = new PureByte(maxBits);
         boolean carry = false;
@@ -45,7 +46,7 @@ public class U2UnsignedBitsMathHelper {
         return subtract2(x, y, null);
     }
 
-    static public PureByte subtract2(PureByte x, PureByte y, PureFlags flags) {
+    static public PureByte subtract2(PureByte x, PureByte y, Flag flags) {
         if (flags != null && x.lessThan(y)) flags.setOverflow(true);
 
         while (!y.isZero()) {
@@ -61,7 +62,7 @@ public class U2UnsignedBitsMathHelper {
         return subtract(x, y, null);
     }
 
-    static public PureByte subtract(PureByte x, PureByte y, PureFlags flags) {
+    static public PureByte subtract(PureByte x, PureByte y, Flag flags) {
         if (flags != null && x.lessThan(y)) flags.setOverflow(true);
 
         PureByte complement = y.negation();
@@ -74,7 +75,7 @@ public class U2UnsignedBitsMathHelper {
     }
 
     //TODO AddMemory support for flags
-    static public PureByte divide(PureByte x, PureByte y, PureFlags flags) {
+    static public PureByte divide(PureByte x, PureByte y, Flag flags) {
         if (flags == null) flags = new PureFlags();
 
         PureByte a = x.copy();
@@ -106,7 +107,7 @@ public class U2UnsignedBitsMathHelper {
         return alignRight(quotient,maxBits);
     }
 
-    public static PureByte restOfDivide(PureByte x, PureByte y, PureFlags flags) {
+    public static PureByte restOfDivide(PureByte x, PureByte y, Flag flags) {
         if (flags == null) flags = new PureFlags();
 
         PureByte a = x.copy();
@@ -160,7 +161,7 @@ public class U2UnsignedBitsMathHelper {
         return result;
     }
 
-    static public PureByte multiply(PureByte left, PureByte right, PureFlags flags) {
+    static public PureByte multiply(PureByte left, PureByte right, Flag flags) {
         int maxBits = Math.max(left.getLength(), right.getLength());
         int computeLength = maxBits * 2;
 

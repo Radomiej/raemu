@@ -1,0 +1,26 @@
+package pl.radomiej.emu.cpu.opcodes.pmc.memory;
+
+import pl.radomiej.emu.cpu.PmcCPU;
+import pl.radomiej.emu.logic.Optcode;
+import pl.radomiej.emu.logic.helpers.ToByteParser;
+import pl.radomiej.emu.logic.pure.PureByte;
+
+public class SaveDirectPmc implements Optcode<PmcCPU> {
+    private final PureByte value;
+    private final int to;
+
+    public SaveDirectPmc(int to, String textValue) {
+        this.to = to;
+        this.value = ToByteParser.parse(textValue);
+    }
+
+    public SaveDirectPmc(int to, int value) {
+        this.to = to;
+        this.value = ToByteParser.parse(value);
+    }
+
+    @Override
+    public void execute(PmcCPU pureCPU) {
+        pureCPU.getMemory().setByIndex(to, value);
+    }
+}

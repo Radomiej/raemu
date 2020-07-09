@@ -6,12 +6,16 @@ import pl.radomiej.emu.logic.pure.PureFlags;
 public class PureCPU implements CPU {
     private PureMemoryBank memory;
     private ProgramData<PureCPU> program;
-    private PureFlags flags;
+    private Flag flags;
 
     public PureCPU(ProgramData<PureCPU> program) {
+        this(program, 64, new PureFlags());
+    }
+
+    public PureCPU(ProgramData<PureCPU> program, int architecture, Flag pureFlags) {
         this.program = program;
-        memory = new PureMemoryBank(64 * 64, 64);
-        flags = new PureFlags();
+        memory = new PureMemoryBank(architecture * architecture, architecture);
+        flags = pureFlags;
     }
 
     public PureMemoryBank getMemory() {
@@ -37,7 +41,7 @@ public class PureCPU implements CPU {
     }
 
     @Override
-    public PureFlags getFlags() {
+    public Flag getFlags() {
         return flags;
     }
 }

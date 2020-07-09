@@ -144,13 +144,34 @@ public class U2UnsignedPureByteTest {
             }
         }
     }
+    @Test
+    public void adjustTest() {
+        PureByte left = ToByteParser.parse("11111111");
+        PureByte right = new PureByte(16);
+        PureByte result = PureByte.adjust(left, right);
+        assertEquals("0000000011111111", result.toBinaryString());
 
+        left = ToByteParser.parse("0000000011111111");
+        right = new PureByte(8);
+        result = PureByte.adjust(left, right);
+        assertEquals("11111111", result.toBinaryString());
+    }
     @Test
     public void addBytesOverflowTest() {
         PureByte left = ToByteParser.parse("11111111");
         PureByte right = ToByteParser.parse("00000010");
         PureByte result = U2UnsignedBitsMathHelper.add(left, right);
+        assertEquals(1, result.toUnsignedInteger());
         assertEquals("00000001", result.toBinaryString());
+    }
+
+    @Test
+    public void addBytesOverflowTest2() {
+        PureByte left = ToByteParser.parse("11111111");
+        PureByte right = ToByteParser.parse("00000001");
+        PureByte result = U2UnsignedBitsMathHelper.add(left, right);
+        assertEquals(0, result.toUnsignedInteger());
+        assertEquals("00000000", result.toBinaryString());
     }
 
     @Test

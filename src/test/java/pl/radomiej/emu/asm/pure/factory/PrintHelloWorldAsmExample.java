@@ -5,9 +5,9 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import pl.radomiej.emu.cpu.ProgramData;
 import pl.radomiej.emu.cpu.PureCPU;
-import pl.radomiej.emu.cpu.optcodes.pure.program.Idle;
-import pl.radomiej.emu.cpu.optcodes.pure.program.JumpTag;
-import pl.radomiej.emu.cpu.optcodes.pure.memory.SaveDirect;
+import pl.radomiej.emu.cpu.opcodes.pure.program.Idle;
+import pl.radomiej.emu.cpu.opcodes.pure.program.JumpTag;
+import pl.radomiej.emu.cpu.opcodes.pure.memory.SaveDirect;
 
 @Builder
 @NoArgsConstructor
