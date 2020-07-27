@@ -144,6 +144,10 @@ public class PureByte implements RaByte {
         return result;
     }
 
+    public String toHexString() {
+        return Integer.toHexString(toUnsignedInteger());
+    }
+
     public String prettyString() {
         String result = toBinaryString();
         result += " = ";

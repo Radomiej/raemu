@@ -11,6 +11,7 @@ import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.Optcode;
 import pl.radomiej.emu.logic.helpers.ToByteParser;
 import pl.radomiej.emu.logic.pure.PureByte;
+import pl.radomiej.imp.i8080.cpu.I8080CPU;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,12 +23,23 @@ import java.util.Stack;
 public class Intel8080BoardTest {
 
     @Test
-    public void bootloaderTest() throws IOException {
-        URL binPath = Resources.getResource("Intel8080/monitor.bin");
+    public void monitorTest() throws IOException {
+        PureCPU myCPU = bootloader("Intel8080/monitor.bin");
+        long startTime = System.nanoTime();
+        for (int i = 0; i < 1000000; i++) {
+            myCPU.tick();
+        }
+        long stopTime = System.nanoTime();
+        long executionTime = stopTime - startTime;
+        System.out.println("Execution time: " + executionTime / 1000000 + " milis");
+    }
+
+    public I8080CPU bootloader(String programPath) throws IOException {
+        URL binPath = Resources.getResource(programPath);
         byte[] rawBin = Resources.toByteArray(binPath);
         List<PureByte> pureBin = new ArrayList<>(rawBin.length);
         Intel8080Babylon babylon = new Intel8080Babylon();
-        for(int i = 0; i < rawBin.length; i++){
+        for (int i = 0; i < rawBin.length; i++) {
             char unsignedByte = (char) rawBin[i];
             PureByte pureByte = ToByteParser.parse(unsignedByte);
             pureBin.add(pureByte);
@@ -37,16 +49,11 @@ public class Intel8080BoardTest {
 
         Optcode<PmcCPU> optcode = babylon.createOptcodeFromMachineCode(pureStackBin);
         System.out.println(optcode);
+        DynamicIntel8080ProgramData dynamicIntel8080ProgramData = new DynamicIntel8080ProgramData();
+        I8080CPU myCPU = new I8080CPU(dynamicIntel8080ProgramData);
+        dynamicIntel8080ProgramData.setCpu(myCPU);
+        return myCPU;
 
-        PureCPU myCPU = new PureCPU(IncrementAsmExample.builder().build().createProgramData());
-
-        long startTime = System.nanoTime();
-        for(int i = 0; i < 1000000; i++) {
-            myCPU.tick();
-        }
-        long stopTime = System.nanoTime();
-        long executionTime = stopTime - startTime;
-        System.out.println("Execution time: " + executionTime / 1000000 + " milis");
     }
 
     @Test
@@ -56,7 +63,7 @@ public class Intel8080BoardTest {
         raBoard.turnOn();
 
         long startTime = System.nanoTime();
-        for(int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             raBoard.tick();
         }
         long stopTime = System.nanoTime();

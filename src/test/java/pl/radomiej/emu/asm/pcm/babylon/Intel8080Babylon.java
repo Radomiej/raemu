@@ -5,10 +5,11 @@ import pl.radomiej.emu.cpu.PmcCPU;
 import pl.radomiej.emu.cpu.opcodes.pmc.program.JumpDirectPmc;
 import pl.radomiej.emu.logic.Optcode;
 import pl.radomiej.emu.logic.pure.PureByte;
+import pl.radomiej.imp.i8080.cpu.I8080CPU;
 
 import java.util.LinkedList;
 
-public class Intel8080Babylon implements OptcodeFactory<PmcCPU> {
+public class Intel8080Babylon implements OptcodeFactory<I8080CPU> {
 
     public PureByte compile(Optcode<PmcCPU> optcode) {
 
@@ -16,13 +17,15 @@ public class Intel8080Babylon implements OptcodeFactory<PmcCPU> {
     }
 
     @Override
-    public Optcode<PmcCPU> createOptcodeFromMachineCode(PureByte rawInstruction) {
+    public Optcode<I8080CPU> createOptcodeFromMachineCode(PureByte rawInstruction) {
         return null;
     }
 
     public Optcode<PmcCPU> createOptcodeFromMachineCode(LinkedList<PureByte> pureStackBin) {
         PureByte commandByte = pureStackBin.poll();
         String textCommand = commandByte.toBinaryString();
+        int opcode = commandByte.toUnsignedInteger();
+
 
         if(textCommand.equals("11000011")) return jumpInstruction(pureStackBin);
 

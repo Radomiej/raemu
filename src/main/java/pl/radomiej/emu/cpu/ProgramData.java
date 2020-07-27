@@ -11,7 +11,7 @@ import java.util.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProgramData<T> {
+public class ProgramData<T extends CPU> {
     private List<Optcode<T>> optcodes = new ArrayList<Optcode<T>>(1000);
     @Getter
     private int current = 0;

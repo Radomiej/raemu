@@ -1,8 +1,9 @@
 package pl.radomiej.imp.i8080.cpu;
 
-import pl.radomiej.emu.cpu.ProgramData;
-import pl.radomiej.emu.cpu.PureCPU;
-import pl.radomiej.emu.cpu.PureRegistryBank;
+import lombok.Getter;
+import lombok.Setter;
+import pl.radomiej.emu.cpu.*;
+import pl.radomiej.emu.logic.helpers.BinaryUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,9 +11,12 @@ import java.util.Map;
 public class I8080CPU extends PureCPU {
     private Map<String, PureRegistryBank> registryBankMap = new HashMap<>();
 
-    public I8080CPU(ProgramData<PureCPU> program) {
-        super(program, 8, new I8080Flags());
+    @Getter
+    @Setter
+    private int PC;
 
+    public I8080CPU(ProgramData<I8080CPU> program) {
+        super(program, 8, new I8080Flags());
         I8080RegistryBank A = new I8080RegistryBank();
         I8080RegistryBank F = new I8080RegistryBank();
         I8080DoubleRegistryBank PSW = new I8080DoubleRegistryBank(A, F);
@@ -44,6 +48,8 @@ public class I8080CPU extends PureCPU {
         registryBankMap.put("H", H);
         registryBankMap.put("L", L);
         registryBankMap.put("HL", HL);
+
+        setMemory(new PureMemoryBank(BinaryUtils.getPowerOfTwo(16)));
     }
 
     public PureRegistryBank getRegistry(String name){

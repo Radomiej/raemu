@@ -5,14 +5,14 @@ import pl.radomiej.emu.logic.pure.PureFlags;
 
 public class PureCPU implements CPU {
     private PureMemoryBank memory;
-    private ProgramData<PureCPU> program;
+    private ProgramData program;
     private Flag flags;
 
-    public PureCPU(ProgramData<PureCPU> program) {
+    public PureCPU(ProgramData program) {
         this(program, 64, new PureFlags());
     }
 
-    public PureCPU(ProgramData<PureCPU> program, int architecture, Flag pureFlags) {
+    public PureCPU(ProgramData program, int architecture, Flag pureFlags) {
         this.program = program;
         memory = new PureMemoryBank(architecture * architecture, architecture);
         flags = pureFlags;
@@ -26,17 +26,17 @@ public class PureCPU implements CPU {
         this.memory = memory;
     }
 
-    public ProgramData<PureCPU> getProgram() {
+    public ProgramData<CPU> getProgram() {
         return program;
     }
 
-    public void setProgram(ProgramData<PureCPU> program) {
+    public void setProgram(ProgramData<CPU> program) {
         this.program = program;
     }
 
     @Override
     public void tick() {
-        Optcode<PureCPU> next = program.getNext();
+        Optcode<CPU> next = program.getNext();
         next.execute(this);
     }
 
