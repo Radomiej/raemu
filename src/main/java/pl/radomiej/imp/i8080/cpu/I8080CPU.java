@@ -12,11 +12,20 @@ public class I8080CPU extends PureCPU {
     private Map<String, PureRegistryBank> registryBankMap = new HashMap<>();
 
     @Getter
+    private DynamicIntel8080ProgramData dedicatedPD;
+
+    @Getter
     @Setter
     private int PC;
 
-    public I8080CPU(ProgramData<I8080CPU> program) {
+    @Getter
+    @Setter
+    private int SP;
+
+    public I8080CPU(DynamicIntel8080ProgramData program) {
         super(program, 8, new I8080Flags());
+        this.dedicatedPD = program;
+
         I8080RegistryBank A = new I8080RegistryBank();
         I8080RegistryBank F = new I8080RegistryBank();
         I8080DoubleRegistryBank PSW = new I8080DoubleRegistryBank(A, F);
@@ -52,7 +61,7 @@ public class I8080CPU extends PureCPU {
         setMemory(new PureMemoryBank(BinaryUtils.getPowerOfTwo(16)));
     }
 
-    public PureRegistryBank getRegistry(String name){
+    public PureRegistryBank getRegistry(String name) {
         return registryBankMap.get(name);
     }
 }

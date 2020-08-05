@@ -22,4 +22,12 @@ public class I8080DoubleBytesHelper {
 
         return new PureByte[]{leftValue, rightValue};
     }
+
+    public static PureByte getRight(PureByte value) {
+        return new PureByte(Arrays.copyOfRange(value.getBites(), 8, 16));
+    }
+
+    public static PureByte getLeft(PureByte value) {
+        return new PureByte(Arrays.copyOfRange(value.getBites(), 0, 8));
+    }
 }

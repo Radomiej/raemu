@@ -3,7 +3,6 @@ package pl.radomiej.imp.i8080;
 import com.google.common.io.Resources;
 import org.junit.jupiter.api.Test;
 import pl.radomiej.emu.asm.pcm.babylon.Intel8080Babylon;
-import pl.radomiej.emu.asm.pure.factory.IncrementAsmExample;
 import pl.radomiej.emu.asm.pure.factory.PrintHelloWorldAsmExample;
 import pl.radomiej.emu.board.RaBoard;
 import pl.radomiej.emu.cpu.PmcCPU;
@@ -11,6 +10,7 @@ import pl.radomiej.emu.cpu.PureCPU;
 import pl.radomiej.emu.logic.Optcode;
 import pl.radomiej.emu.logic.helpers.ToByteParser;
 import pl.radomiej.emu.logic.pure.PureByte;
+import pl.radomiej.imp.i8080.cpu.DynamicIntel8080ProgramData;
 import pl.radomiej.imp.i8080.cpu.I8080CPU;
 
 import java.io.IOException;
@@ -18,7 +18,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
 public class Intel8080BoardTest {
 
@@ -50,7 +49,7 @@ public class Intel8080BoardTest {
         Optcode<PmcCPU> optcode = babylon.createOptcodeFromMachineCode(pureStackBin);
         System.out.println(optcode);
         DynamicIntel8080ProgramData dynamicIntel8080ProgramData = new DynamicIntel8080ProgramData();
-        I8080CPU myCPU = new I8080CPU(dynamicIntel8080ProgramData);
+        I8080CPU myCPU = new I8080CPU(dynamicIntel8080ProgramData, programRaw);
         dynamicIntel8080ProgramData.setCpu(myCPU);
         return myCPU;
 

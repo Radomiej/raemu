@@ -1,31 +1,21 @@
 package pl.radomiej.imp.i8080;
 
-import com.google.common.io.Resources;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import pl.radomiej.emu.asm.pcm.babylon.Intel8080Babylon;
 import pl.radomiej.emu.asm.pure.factory.IncrementAsmExample;
 import pl.radomiej.emu.asm.pure.factory.PrintHelloWorldAsmExample;
 import pl.radomiej.emu.board.RaBoard;
-import pl.radomiej.emu.cpu.PmcCPU;
-import pl.radomiej.emu.cpu.PureCPU;
-import pl.radomiej.emu.logic.Optcode;
 import pl.radomiej.emu.logic.helpers.ToByteParser;
-import pl.radomiej.emu.logic.pure.PureByte;
 import pl.radomiej.imp.i8080.cpu.I8080CPU;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Intel8080CPUTest {
 
     @Test
     public void registryTest() throws IOException {
 
-        I8080CPU myCPU = new I8080CPU(IncrementAsmExample.builder().build().createProgramData());
+        I8080CPU myCPU = new I8080CPU(IncrementAsmExample.builder().build().createProgramData(), programRaw);
         Assertions.assertNotNull(myCPU.getRegistry("A"));
         Assertions.assertNotNull(myCPU.getRegistry("F"));
         Assertions.assertNotNull(myCPU.getRegistry("PSW"));

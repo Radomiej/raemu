@@ -1,8 +1,10 @@
-package pl.radomiej.imp.i8080;
+package pl.radomiej.imp.i8080.cpu;
 
 import pl.radomiej.emu.cpu.ProgramData;
+import pl.radomiej.emu.cpu.PureMemoryBank;
 import pl.radomiej.emu.logic.Optcode;
-import pl.radomiej.imp.i8080.cpu.I8080CPU;
+import pl.radomiej.emu.logic.helpers.ToByteParser;
+import pl.radomiej.emu.logic.pure.PureByte;
 import pl.radomiej.imp.i8080.cpu.opcodes.*;
 
 import java.util.HashMap;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 public class DynamicIntel8080ProgramData extends ProgramData<I8080CPU> {
     private I8080CPU myCPU;
     private HashMap<Integer, Optcode<I8080CPU>> opcodesMap = new HashMap<>();
+    private PureMemoryBank programRaw;
 
     public DynamicIntel8080ProgramData(){
         /**
@@ -39,7 +42,7 @@ public class DynamicIntel8080ProgramData extends ProgramData<I8080CPU> {
 
         opcodesMap.put(0x0A, new MoveFromMemory("BC", "A"));
         opcodesMap.put(0x1A, new MoveFromMemory("DE", "A"));
-        opcodesMap.put(0x3A, new MoveFromMemoryCpWord("A"));
+        opcodesMap.put(0x3A, new MoveWordFromProgramROM("A"));
 
         /**
          *   case 0x47: c->b = c->a; break; // MOV B,A
@@ -182,13 +185,84 @@ public class DynamicIntel8080ProgramData extends ProgramData<I8080CPU> {
          *   case 0x26: c->h = i8080_next_byte(c); break; // MVI H,byte
          *   case 0x2E: c->l = i8080_next_byte(c); break; // MVI L,byte
          */
-        opcodesMap.put(0x3E, new MoveFromMemoryCpByte("A"));
-        opcodesMap.put(0x06, new MoveFromMemoryCpByte("B"));
-        opcodesMap.put(0x0E, new MoveFromMemoryCpByte("C"));
-        opcodesMap.put(0x16, new MoveFromMemoryCpByte("D"));
-        opcodesMap.put(0x1E, new MoveFromMemoryCpByte("E"));
-        opcodesMap.put(0x26, new MoveFromMemoryCpByte("H"));
-        opcodesMap.put(0x2E, new MoveFromMemoryCpByte("L"));
+        opcodesMap.put(0x3E, new MoveByteFromProgramROM("A"));
+        opcodesMap.put(0x06, new MoveByteFromProgramROM("B"));
+        opcodesMap.put(0x0E, new MoveByteFromProgramROM("C"));
+        opcodesMap.put(0x16, new MoveByteFromProgramROM("D"));
+        opcodesMap.put(0x1E, new MoveByteFromProgramROM("E"));
+        opcodesMap.put(0x26, new MoveByteFromProgramROM("H"));
+        opcodesMap.put(0x2E, new MoveByteFromProgramROM("L"));
+
+        /**
+         *     case 0x36:
+         *     i8080_wb(c, i8080_get_hl(c), i8080_next_byte(c));
+         *     break; // MVI M,byte
+         */
+        opcodesMap.put(0x36, new MoveByteFromProgramROMToMemory("HL"));
+
+        /**
+         *   case 0x02: i8080_wb(c, i8080_get_bc(c), c->a); break; // STAX B
+         *   case 0x12: i8080_wb(c, i8080_get_de(c), c->a); break; // STAX D
+         *   case 0x32: i8080_wb(c, i8080_next_word(c), c->a); break; // STA word
+         */
+        opcodesMap.put(0x02, new MoveToMemory("BC", "A"));
+        opcodesMap.put(0x12, new MoveToMemory("DE", "A"));
+        opcodesMap.put(0x32, new MoveToMemoryProgramROM("A"));
+
+        /**
+         *   case 0x01: i8080_set_bc(c, i8080_next_word(c)); break; // LXI B,word
+         *   case 0x11: i8080_set_de(c, i8080_next_word(c)); break; // LXI D,word
+         *   case 0x21: i8080_set_hl(c, i8080_next_word(c)); break; // LXI H,word
+         *   case 0x31: c->sp = i8080_next_word(c); break; // LXI SP,word
+         *   case 0x2A: i8080_set_hl(c, i8080_rw(c, i8080_next_word(c))); break; // LHLD
+         *   case 0x22: i8080_ww(c, i8080_next_word(c), i8080_get_hl(c)); break; // SHLD
+         *   case 0xF9: c->sp = i8080_get_hl(c); break; // SPHL
+         */
+        opcodesMap.put(0x01, new MoveWordFromProgramROM("BC"));
+        opcodesMap.put(0x11, new MoveWordFromProgramROM("DE"));
+        opcodesMap.put(0x21, new MoveWordFromProgramROM("HL"));
+        opcodesMap.put(0x31, new MoveWordFromProgramROMToSP());
+        opcodesMap.put(0x2A, new MoveWordFromProgramROMAddress("HL"));
+        opcodesMap.put(0x22, new WriteWordFromProgramROM("HL"));
+        opcodesMap.put(0xF9, new SetSP("HL"));
+
+        /**
+         *   case 0xEB: i8080_xchg(c); break; // XCHG
+         *   case 0xE3: i8080_xthl(c); break; // XTHL
+         */
+        opcodesMap.put(0xEB, new SwitchBetweenRegisters("DE", "HL"));
+        opcodesMap.put(0xE3, new SwitchSP( "HL"));
+
+        /**
+         *   case 0x87: i8080_add(c, &c->a, c->a, 0); break; // ADD A
+         *   case 0x80: i8080_add(c, &c->a, c->b, 0); break; // ADD B
+         *   case 0x81: i8080_add(c, &c->a, c->c, 0); break; // ADD C
+         *   case 0x82: i8080_add(c, &c->a, c->d, 0); break; // ADD D
+         *   case 0x83: i8080_add(c, &c->a, c->e, 0); break; // ADD E
+         *   case 0x84: i8080_add(c, &c->a, c->h, 0); break; // ADD H
+         *   case 0x85: i8080_add(c, &c->a, c->l, 0); break; // ADD L
+         *   case 0x86:
+         *     i8080_add(c, &c->a, i8080_rb(c, i8080_get_hl(c)), 0);
+         *     break; // ADD M
+         *   case 0xC6: i8080_add(c, &c->a, i8080_next_byte(c), 0); break; // ADI byte
+         */
+        opcodesMap.put(0x87, new AddToAFromRegistry( "A"));
+        opcodesMap.put(0x80, new AddToAFromRegistry( "B"));
+        opcodesMap.put(0x81, new AddToAFromRegistry( "C"));
+        opcodesMap.put(0x82, new AddToAFromRegistry( "D"));
+        opcodesMap.put(0x83, new AddToAFromRegistry( "E"));
+        opcodesMap.put(0x84, new AddToAFromRegistry( "H"));
+        opcodesMap.put(0x85, new AddToAFromRegistry( "L"));
+        opcodesMap.put(0x86, new AddToAFromMemory( "HL"));
+        opcodesMap.put(0xC6, new AddToAFromROM());
+    }
+
+    public void InjectProgram(byte[] data){
+        programRaw = new PureMemoryBank(16384);
+        for(int i = 0; i < data.length; i++){
+            PureByte pureByte = ToByteParser.parse(data[i]);
+            programRaw.setByIndex(i, pureByte);
+        }
     }
 
     public void setCpu(I8080CPU myCPU) {
@@ -198,10 +272,19 @@ public class DynamicIntel8080ProgramData extends ProgramData<I8080CPU> {
     @Override
     public Optcode<I8080CPU> getNext() {
         int memoryPCIndex = myCPU.getPC();
-        int opcode = myCPU.getMemory().getByIndex(memoryPCIndex).toUnsignedInteger();
+        int opcode = programRaw.getByIndex(memoryPCIndex).toUnsignedInteger();
         memoryPCIndex++;
         myCPU.setPC(memoryPCIndex);
 
         return opcodesMap.get(opcode);
+    }
+
+    public PureByte getNextRaw() {
+        int memoryPCIndex = myCPU.getPC();
+        PureByte rawPCValue = programRaw.getByIndex(memoryPCIndex);
+        memoryPCIndex++;
+        myCPU.setPC(memoryPCIndex);
+
+        return rawPCValue;
     }
 }

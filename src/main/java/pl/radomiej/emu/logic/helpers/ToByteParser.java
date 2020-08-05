@@ -21,4 +21,9 @@ public class ToByteParser {
         String s2 = String.format("%8s", Integer.toBinaryString(bit8 & 0xFF)).replace(' ', '0');
         return parse(s2);
     }
+
+    public static PureByte parse16(int bit16){
+        String s2 = String.format("%16s", Integer.toBinaryString(bit16 & 0xFFFF)).replace(' ', '0');
+        return parse(s2);
+    }
 }
