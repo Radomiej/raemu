@@ -7,8 +7,10 @@ import pl.radomiej.imp.i8080.cpu.I8080CPU;
 
 public class AddToAFromROM implements Optcode<I8080CPU> {
     final private String to;
+    final private boolean useFlag;
 
-    public AddToAFromROM() {
+    public AddToAFromROM(boolean useFlag) {
+        this.useFlag = useFlag;
         this.to = "A";
     }
 

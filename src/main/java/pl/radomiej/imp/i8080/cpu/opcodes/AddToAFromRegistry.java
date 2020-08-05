@@ -8,9 +8,11 @@ import pl.radomiej.imp.i8080.cpu.I8080CPU;
 public class AddToAFromRegistry implements Optcode<I8080CPU> {
     final private String from;
     final private String to;
+    final private boolean useFlag;
 
-    public AddToAFromRegistry(String from) {
+    public AddToAFromRegistry(String from, boolean useFlag) {
         this.from = from;
+        this.useFlag = useFlag;
         this.to = "A";
     }
 

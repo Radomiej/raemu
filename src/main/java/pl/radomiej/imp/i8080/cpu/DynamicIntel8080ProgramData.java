@@ -246,15 +246,38 @@ public class DynamicIntel8080ProgramData extends ProgramData<I8080CPU> {
          *     break; // ADD M
          *   case 0xC6: i8080_add(c, &c->a, i8080_next_byte(c), 0); break; // ADI byte
          */
-        opcodesMap.put(0x87, new AddToAFromRegistry( "A"));
-        opcodesMap.put(0x80, new AddToAFromRegistry( "B"));
-        opcodesMap.put(0x81, new AddToAFromRegistry( "C"));
-        opcodesMap.put(0x82, new AddToAFromRegistry( "D"));
-        opcodesMap.put(0x83, new AddToAFromRegistry( "E"));
-        opcodesMap.put(0x84, new AddToAFromRegistry( "H"));
-        opcodesMap.put(0x85, new AddToAFromRegistry( "L"));
-        opcodesMap.put(0x86, new AddToAFromMemory( "HL"));
-        opcodesMap.put(0xC6, new AddToAFromROM());
+        opcodesMap.put(0x87, new AddToAFromRegistry( "A", false));
+        opcodesMap.put(0x80, new AddToAFromRegistry( "B", false));
+        opcodesMap.put(0x81, new AddToAFromRegistry( "C", false));
+        opcodesMap.put(0x82, new AddToAFromRegistry( "D", false));
+        opcodesMap.put(0x83, new AddToAFromRegistry( "E", false));
+        opcodesMap.put(0x84, new AddToAFromRegistry( "H", false));
+        opcodesMap.put(0x85, new AddToAFromRegistry( "L", false));
+        opcodesMap.put(0x86, new AddToAFromMemory( "HL", false));
+        opcodesMap.put(0xC6, new AddToAFromROM(false));
+
+        /**
+         *   case 0x8F: i8080_add(c, &c->a, c->a, c->cf); break; // ADC A
+         *   case 0x88: i8080_add(c, &c->a, c->b, c->cf); break; // ADC B
+         *   case 0x89: i8080_add(c, &c->a, c->c, c->cf); break; // ADC C
+         *   case 0x8A: i8080_add(c, &c->a, c->d, c->cf); break; // ADC D
+         *   case 0x8B: i8080_add(c, &c->a, c->e, c->cf); break; // ADC E
+         *   case 0x8C: i8080_add(c, &c->a, c->h, c->cf); break; // ADC H
+         *   case 0x8D: i8080_add(c, &c->a, c->l, c->cf); break; // ADC L
+         *   case 0x8E:
+         *     i8080_add(c, &c->a, i8080_rb(c, i8080_get_hl(c)), c->cf);
+         *     break; // ADC M
+         *   case 0xCE: i8080_add(c, &c->a, i8080_next_byte(c), c->cf); break; // ACI byte
+         */
+        opcodesMap.put(0x8F, new AddToAFromRegistry( "A", true));
+        opcodesMap.put(0x88, new AddToAFromRegistry( "B", true));
+        opcodesMap.put(0x89, new AddToAFromRegistry( "C", true));
+        opcodesMap.put(0x8A, new AddToAFromRegistry( "D", true));
+        opcodesMap.put(0x8B, new AddToAFromRegistry( "E", true));
+        opcodesMap.put(0x8C, new AddToAFromRegistry( "H", true));
+        opcodesMap.put(0x8D, new AddToAFromRegistry( "L", true));
+        opcodesMap.put(0x8E, new AddToAFromMemory( "HL", true));
+        opcodesMap.put(0xCE, new AddToAFromROM(true));
     }
 
     public void InjectProgram(byte[] data){
